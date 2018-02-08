@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity TransactionOperation.
+    -->
+    <changeSet id="20180208111459-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="transaction_signer_id"
+                                 baseTableName="transaction_operation"
+                                 constraintName="fk_transaction_operation_transaction_signer_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_signer"/>
+
+    </changeSet>
+</databaseChangeLog>

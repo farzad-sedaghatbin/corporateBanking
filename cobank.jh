@@ -1,0 +1,68 @@
+entity CorporateTransaction {
+createDate ZonedDateTime,
+transactionType TransactionType,
+amount BigDecimal,
+transactionId Long,
+draft Boolean,
+fromAccountId Long,
+toAccountId Long,
+trackingCode String,
+status TransactionStatus,
+creatorId Long
+
+}
+enum TransactionStatus{
+	CREATE , DONE
+}
+enum TransactionType {
+    RTGS , ACH
+}
+
+entity TransactionTag{
+lable String,
+partyId Long
+}
+entity TransactionDescription{
+lable String,
+partyId Long
+}
+entity TransactionSigner{
+signOrder Integer,
+partId Long
+}
+
+entity TransactionOperation{
+operationDate ZonedDateTime,
+operationType OperationType,
+comment String
+
+}
+ enum OperationType{
+ REJECT , APPROVE
+ }
+
+relationship OneToMany{
+  CorporateTransaction {tags} to TransactionTag
+}
+relationship OneToMany{
+  CorporateTransaction {descriptions} to TransactionDescription
+}
+
+relationship OneToMany{
+  CorporateTransaction {signers} to TransactionSigner
+}
+
+relationship OneToMany{
+  TransactionSigner {operations} to TransactionOperation
+}
+
+// Set pagination options
+paginate CorporateTransaction, TransactionTag, TransactionOperation, TransactionSigner, TransactionDescription  with infinite-scroll
+
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+// Set an angular suffix
+angularSuffix * with kianDigital

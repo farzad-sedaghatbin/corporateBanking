@@ -1,0 +1,35 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "corporateTransaction",
+            "otherEntityName": "corporateTransaction",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "operations",
+            "otherEntityName": "transactionOperation",
+            "otherEntityRelationshipName": "transactionSigner"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "signOrder",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "partId",
+            "fieldType": "Long"
+        }
+    ],
+    "changelogDate": "20180208111458",
+    "entityTableName": "transaction_signer",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "kianDigital",
+    "microserviceName": "corporateBanking"
+}

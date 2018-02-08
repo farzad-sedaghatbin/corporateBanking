@@ -38,6 +38,15 @@ public class CacheConfiguration {
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
             cm.createCache("oAuth2Authentication", jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.CorporateTransaction.class.getName(), jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.CorporateTransaction.class.getName() + ".tags", jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.CorporateTransaction.class.getName() + ".descriptions", jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.CorporateTransaction.class.getName() + ".signers", jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.TransactionTag.class.getName(), jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.TransactionDescription.class.getName(), jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.TransactionSigner.class.getName(), jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.TransactionSigner.class.getName() + ".operations", jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.TransactionOperation.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
