@@ -1,0 +1,75 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "tags",
+            "otherEntityName": "transactionTag",
+            "otherEntityRelationshipName": "corporateTransaction"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "descriptions",
+            "otherEntityName": "transactionDescription",
+            "otherEntityRelationshipName": "corporateTransaction"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "signers",
+            "otherEntityName": "transactionSigner",
+            "otherEntityRelationshipName": "corporateTransaction"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "createDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "transactionType",
+            "fieldType": "TransactionType",
+            "fieldValues": "RTGS,ACH"
+        },
+        {
+            "fieldName": "amount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "transactionId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "draft",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "fromAccountId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "toAccountId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "trackingCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "TransactionStatus",
+            "fieldValues": "CREATE,DONE"
+        },
+        {
+            "fieldName": "creatorId",
+            "fieldType": "Long"
+        }
+    ],
+    "changelogDate": "20180208111455",
+    "entityTableName": "corporate_transaction",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "kianDigital",
+    "microserviceName": "corporateBanking"
+}

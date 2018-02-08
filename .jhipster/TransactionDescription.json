@@ -1,0 +1,29 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "corporateTransaction",
+            "otherEntityName": "corporateTransaction",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "lable",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "partyId",
+            "fieldType": "Long"
+        }
+    ],
+    "changelogDate": "20180208111457",
+    "entityTableName": "transaction_description",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "kianDigital",
+    "microserviceName": "corporateBanking"
+}
