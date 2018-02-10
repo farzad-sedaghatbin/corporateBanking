@@ -29,18 +29,18 @@ spring:
         livereload:
             enabled: false # we use gulp + BrowserSync for livereload
     jackson:
-        serialization.indent_output: true
-    cloud:
-        consul:
-            discovery:
-               prefer-ip-address: true
-            host: localhost
-            port: 8500
+#        serialization.indent_output: true
+#    cloud:
+#        consul:
+#            discovery:
+#               prefer-ip-address: true
+#            host: localhost
+#            port: 8500
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/corporateBanking
-        username: corporateBanking
-        password:
+        url: jdbc:postgresql://localhost:5432/corporatebank
+        username: postgres
+        password: arsham
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
         database: POSTGRESQL

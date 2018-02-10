@@ -87,21 +87,21 @@ spring:
 security:
     basic:
         enabled: false
-    oauth2:
-        client:
-            access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
-            user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            client-id: internal
-            client-secret: internal
-            authentication-scheme: header
-            client-authentication-scheme: header
-        resource:
-            filter-order: 3
-            user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
-            token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
-            prefer-token-info: false
-            jwt:
-                key-uri: http://localhost:9080/auth/realms/jhipster
+#    oauth2:
+#        client:
+#            access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
+#            user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
+#            client-id: internal
+#            client-secret: internal
+#            authentication-scheme: header
+#            client-authentication-scheme: header
+#        resource:
+#            filter-order: 3
+#            user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+#            token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
+#            prefer-token-info: false
+#            jwt:
+#                key-uri: http://localhost:9080/auth/realms/jhipster
 
 server:
     session:
