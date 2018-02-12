@@ -8,8 +8,12 @@ fromAccountId Long,
 toAccountId Long,
 trackingCode String,
 status TransactionStatus,
-creatorId Long
+creatorId Long,
+transactionType TransactionType
 
+}
+enum TransactionType{
+	DEPOSIT , WITHDRAW
 }
 enum TransactionStatus{
 	CREATE , DONE
