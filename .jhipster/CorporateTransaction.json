@@ -9,12 +9,6 @@
         },
         {
             "relationshipType": "one-to-many",
-            "relationshipName": "tags",
-            "otherEntityName": "transactionTag",
-            "otherEntityRelationshipName": "corporateTransaction"
-        },
-        {
-            "relationshipType": "one-to-many",
             "relationshipName": "descriptions",
             "otherEntityName": "transactionDescription",
             "otherEntityRelationshipName": "corporateTransaction"
@@ -24,6 +18,14 @@
             "relationshipName": "signers",
             "otherEntityName": "transactionSigner",
             "otherEntityRelationshipName": "corporateTransaction"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "",
+            "relationshipName": "tags",
+            "otherEntityName": "transactionTag",
+            "otherEntityField": "id",
+            "ownerSide": true
         }
     ],
     "fields": [

@@ -65,6 +65,17 @@
         </createTable>
         <dropDefaultValue tableName="corporate_transaction" columnName="create_date" columnDataType="datetime"/>
         
+        <createTable tableName="corporate_transaction_tags">
+            <column name="tags_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="corporate_transactions_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="corporate_transactions_id, tags_id" tableName="corporate_transaction_tags"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

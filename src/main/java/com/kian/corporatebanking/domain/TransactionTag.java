@@ -23,14 +23,11 @@ public class TransactionTag implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "lable")
-    private String lable;
+    @Column(name = "jhi_label")
+    private String label;
 
     @Column(name = "party_id")
     private Long partyId;
-
-    @ManyToOne
-    private CorporateTransaction corporateTransaction;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -41,17 +38,17 @@ public class TransactionTag implements Serializable {
         this.id = id;
     }
 
-    public String getLable() {
-        return lable;
+    public String getLabel() {
+        return label;
     }
 
-    public TransactionTag lable(String lable) {
-        this.lable = lable;
+    public TransactionTag label(String label) {
+        this.label = label;
         return this;
     }
 
-    public void setLable(String lable) {
-        this.lable = lable;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public Long getPartyId() {
@@ -65,19 +62,6 @@ public class TransactionTag implements Serializable {
 
     public void setPartyId(Long partyId) {
         this.partyId = partyId;
-    }
-
-    public CorporateTransaction getCorporateTransaction() {
-        return corporateTransaction;
-    }
-
-    public TransactionTag corporateTransaction(CorporateTransaction corporateTransaction) {
-        this.corporateTransaction = corporateTransaction;
-        return this;
-    }
-
-    public void setCorporateTransaction(CorporateTransaction corporateTransaction) {
-        this.corporateTransaction = corporateTransaction;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -105,7 +89,7 @@ public class TransactionTag implements Serializable {
     public String toString() {
         return "TransactionTag{" +
             "id=" + getId() +
-            ", lable='" + getLable() + "'" +
+            ", label='" + getLabel() + "'" +
             ", partyId=" + getPartyId() +
             "}";
     }

@@ -41,8 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = CorporateBankingApp.class)
 public class TransactionTagResourceIntTest {
 
-    private static final String DEFAULT_LABLE = "AAAAAAAAAA";
-    private static final String UPDATED_LABLE = "BBBBBBBBBB";
+    private static final String DEFAULT_LABEL = "AAAAAAAAAA";
+    private static final String UPDATED_LABEL = "BBBBBBBBBB";
 
     private static final Long DEFAULT_PARTY_ID = 1L;
     private static final Long UPDATED_PARTY_ID = 2L;
@@ -91,7 +91,7 @@ public class TransactionTagResourceIntTest {
      */
     public static TransactionTag createEntity(EntityManager em) {
         TransactionTag transactionTag = new TransactionTag()
-            .lable(DEFAULT_LABLE)
+            .label(DEFAULT_LABEL)
             .partyId(DEFAULT_PARTY_ID);
         return transactionTag;
     }
@@ -117,7 +117,7 @@ public class TransactionTagResourceIntTest {
         List<TransactionTag> transactionTagList = transactionTagRepository.findAll();
         assertThat(transactionTagList).hasSize(databaseSizeBeforeCreate + 1);
         TransactionTag testTransactionTag = transactionTagList.get(transactionTagList.size() - 1);
-        assertThat(testTransactionTag.getLable()).isEqualTo(DEFAULT_LABLE);
+        assertThat(testTransactionTag.getLabel()).isEqualTo(DEFAULT_LABEL);
         assertThat(testTransactionTag.getPartyId()).isEqualTo(DEFAULT_PARTY_ID);
     }
 
@@ -152,7 +152,7 @@ public class TransactionTagResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(transactionTag.getId().intValue())))
-            .andExpect(jsonPath("$.[*].lable").value(hasItem(DEFAULT_LABLE.toString())))
+            .andExpect(jsonPath("$.[*].label").value(hasItem(DEFAULT_LABEL.toString())))
             .andExpect(jsonPath("$.[*].partyId").value(hasItem(DEFAULT_PARTY_ID.intValue())));
     }
 
@@ -167,7 +167,7 @@ public class TransactionTagResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(transactionTag.getId().intValue()))
-            .andExpect(jsonPath("$.lable").value(DEFAULT_LABLE.toString()))
+            .andExpect(jsonPath("$.label").value(DEFAULT_LABEL.toString()))
             .andExpect(jsonPath("$.partyId").value(DEFAULT_PARTY_ID.intValue()));
     }
 
@@ -191,7 +191,7 @@ public class TransactionTagResourceIntTest {
         // Disconnect from session so that the updates on updatedTransactionTag are not directly saved in db
         em.detach(updatedTransactionTag);
         updatedTransactionTag
-            .lable(UPDATED_LABLE)
+            .label(UPDATED_LABEL)
             .partyId(UPDATED_PARTY_ID);
         TransactionTagDTO transactionTagDTO = transactionTagMapper.toDto(updatedTransactionTag);
 
@@ -204,7 +204,7 @@ public class TransactionTagResourceIntTest {
         List<TransactionTag> transactionTagList = transactionTagRepository.findAll();
         assertThat(transactionTagList).hasSize(databaseSizeBeforeUpdate);
         TransactionTag testTransactionTag = transactionTagList.get(transactionTagList.size() - 1);
-        assertThat(testTransactionTag.getLable()).isEqualTo(UPDATED_LABLE);
+        assertThat(testTransactionTag.getLabel()).isEqualTo(UPDATED_LABEL);
         assertThat(testTransactionTag.getPartyId()).isEqualTo(UPDATED_PARTY_ID);
     }
 

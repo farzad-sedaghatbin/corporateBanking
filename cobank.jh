@@ -23,7 +23,7 @@ enum TransactionType {
 }
 
 entity TransactionTag{
-lable String,
+label String,
 partyId Long
 }
 entity TransactionDescription{
@@ -32,6 +32,7 @@ partyId Long
 }
 entity TransactionSigner{
 signOrder Integer,
+roleType RoleType,
 partId Long
 }
 
@@ -44,6 +45,10 @@ comment String
  enum OperationType{
  REJECT , APPROVE
  }
+ 
+ enum RoleType{
+ MAKER , CHECKER
+ }
 entity TransactionContents{
 content Blob
 }
@@ -51,7 +56,7 @@ content Blob
 relationship OneToMany{
   CorporateTransaction {content} to TransactionContents
 }
-relationship OneToMany{
+relationship ManyToMany{
   CorporateTransaction {tags} to TransactionTag
 }
 relationship OneToMany{

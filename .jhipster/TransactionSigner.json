@@ -20,6 +20,11 @@
             "fieldType": "Integer"
         },
         {
+            "fieldName": "roleType",
+            "fieldType": "RoleType",
+            "fieldValues": "MAKER,CHECKER"
+        },
+        {
             "fieldName": "partId",
             "fieldType": "Long"
         }

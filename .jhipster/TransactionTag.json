@@ -1,16 +1,9 @@
 {
     "fluentMethods": true,
-    "relationships": [
-        {
-            "relationshipName": "corporateTransaction",
-            "otherEntityName": "corporateTransaction",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "id"
-        }
-    ],
+    "relationships": [],
     "fields": [
         {
-            "fieldName": "lable",
+            "fieldName": "label",
             "fieldType": "String"
         },
         {
