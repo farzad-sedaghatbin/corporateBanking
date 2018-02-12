@@ -25,6 +25,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="role_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="part_id" type="bigint">
                 <constraints nullable="true" />
             </column>

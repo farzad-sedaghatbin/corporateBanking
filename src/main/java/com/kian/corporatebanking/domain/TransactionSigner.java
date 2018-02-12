@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
 
+import com.kian.corporatebanking.domain.enumeration.RoleType;
+
 /**
  * A TransactionSigner.
  */
@@ -28,6 +30,10 @@ public class TransactionSigner implements Serializable {
 
     @Column(name = "sign_order")
     private Integer signOrder;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_type")
+    private RoleType roleType;
 
     @Column(name = "part_id")
     private Long partId;
@@ -60,6 +66,19 @@ public class TransactionSigner implements Serializable {
 
     public void setSignOrder(Integer signOrder) {
         this.signOrder = signOrder;
+    }
+
+    public RoleType getRoleType() {
+        return roleType;
+    }
+
+    public TransactionSigner roleType(RoleType roleType) {
+        this.roleType = roleType;
+        return this;
+    }
+
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
     }
 
     public Long getPartId() {
@@ -139,6 +158,7 @@ public class TransactionSigner implements Serializable {
         return "TransactionSigner{" +
             "id=" + getId() +
             ", signOrder=" + getSignOrder() +
+            ", roleType='" + getRoleType() + "'" +
             ", partId=" + getPartId() +
             "}";
     }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import com.kian.corporatebanking.domain.enumeration.RoleType;
 
 /**
  * A DTO for the TransactionSigner entity.
@@ -14,6 +15,8 @@ public class TransactionSignerDTO implements Serializable {
     private Long id;
 
     private Integer signOrder;
+
+    private RoleType roleType;
 
     private Long partId;
 
@@ -33,6 +36,14 @@ public class TransactionSignerDTO implements Serializable {
 
     public void setSignOrder(Integer signOrder) {
         this.signOrder = signOrder;
+    }
+
+    public RoleType getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
     }
 
     public Long getPartId() {
@@ -77,6 +88,7 @@ public class TransactionSignerDTO implements Serializable {
         return "TransactionSignerDTO{" +
             "id=" + getId() +
             ", signOrder=" + getSignOrder() +
+            ", roleType='" + getRoleType() + "'" +
             ", partId=" + getPartId() +
             "}";
     }

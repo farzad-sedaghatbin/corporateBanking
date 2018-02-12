@@ -76,7 +76,7 @@ class TransactionSignerGatlingTest extends Simulation {
             .exec(http("Create new transactionSigner")
             .post("/corporatebanking/api/transaction-signers")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "signOrder":"0", "partId":null}""")).asJSON
+            .body(StringBody("""{"id":null, "signOrder":"0", "roleType":null, "partId":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_transactionSigner_url"))).exitHereIfFailed
             .pause(10)

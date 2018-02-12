@@ -32,6 +32,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.kian.corporatebanking.domain.enumeration.RoleType;
 /**
  * Test class for the TransactionSignerResource REST controller.
  *
@@ -43,6 +44,9 @@ public class TransactionSignerResourceIntTest {
 
     private static final Integer DEFAULT_SIGN_ORDER = 1;
     private static final Integer UPDATED_SIGN_ORDER = 2;
+
+    private static final RoleType DEFAULT_ROLE_TYPE = RoleType.MAKER;
+    private static final RoleType UPDATED_ROLE_TYPE = RoleType.CHECKER;
 
     private static final Long DEFAULT_PART_ID = 1L;
     private static final Long UPDATED_PART_ID = 2L;
@@ -92,6 +96,7 @@ public class TransactionSignerResourceIntTest {
     public static TransactionSigner createEntity(EntityManager em) {
         TransactionSigner transactionSigner = new TransactionSigner()
             .signOrder(DEFAULT_SIGN_ORDER)
+            .roleType(DEFAULT_ROLE_TYPE)
             .partId(DEFAULT_PART_ID);
         return transactionSigner;
     }
@@ -118,6 +123,7 @@ public class TransactionSignerResourceIntTest {
         assertThat(transactionSignerList).hasSize(databaseSizeBeforeCreate + 1);
         TransactionSigner testTransactionSigner = transactionSignerList.get(transactionSignerList.size() - 1);
         assertThat(testTransactionSigner.getSignOrder()).isEqualTo(DEFAULT_SIGN_ORDER);
+        assertThat(testTransactionSigner.getRoleType()).isEqualTo(DEFAULT_ROLE_TYPE);
         assertThat(testTransactionSigner.getPartId()).isEqualTo(DEFAULT_PART_ID);
     }
 
@@ -153,6 +159,7 @@ public class TransactionSignerResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(transactionSigner.getId().intValue())))
             .andExpect(jsonPath("$.[*].signOrder").value(hasItem(DEFAULT_SIGN_ORDER)))
+            .andExpect(jsonPath("$.[*].roleType").value(hasItem(DEFAULT_ROLE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].partId").value(hasItem(DEFAULT_PART_ID.intValue())));
     }
 
@@ -168,6 +175,7 @@ public class TransactionSignerResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(transactionSigner.getId().intValue()))
             .andExpect(jsonPath("$.signOrder").value(DEFAULT_SIGN_ORDER))
+            .andExpect(jsonPath("$.roleType").value(DEFAULT_ROLE_TYPE.toString()))
             .andExpect(jsonPath("$.partId").value(DEFAULT_PART_ID.intValue()));
     }
 
@@ -192,6 +200,7 @@ public class TransactionSignerResourceIntTest {
         em.detach(updatedTransactionSigner);
         updatedTransactionSigner
             .signOrder(UPDATED_SIGN_ORDER)
+            .roleType(UPDATED_ROLE_TYPE)
             .partId(UPDATED_PART_ID);
         TransactionSignerDTO transactionSignerDTO = transactionSignerMapper.toDto(updatedTransactionSigner);
 
@@ -205,6 +214,7 @@ public class TransactionSignerResourceIntTest {
         assertThat(transactionSignerList).hasSize(databaseSizeBeforeUpdate);
         TransactionSigner testTransactionSigner = transactionSignerList.get(transactionSignerList.size() - 1);
         assertThat(testTransactionSigner.getSignOrder()).isEqualTo(UPDATED_SIGN_ORDER);
+        assertThat(testTransactionSigner.getRoleType()).isEqualTo(UPDATED_ROLE_TYPE);
         assertThat(testTransactionSigner.getPartId()).isEqualTo(UPDATED_PART_ID);
     }
 

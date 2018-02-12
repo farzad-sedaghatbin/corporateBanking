@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity CorporateTransaction.
+    -->
+    <changeSet id="20180208111455-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="corporate_transactions_id"
+                                 baseTableName="corporate_transaction_tags"
+                                 constraintName="fk_corporate_transaction_tags_corporate_transactions_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="corporate_transaction"/>
+        <addForeignKeyConstraint baseColumnNames="tags_id"
+                                 baseTableName="corporate_transaction_tags"
+                                 constraintName="fk_corporate_transaction_tags_tags_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_tag"/>
+        
+    </changeSet>
+</databaseChangeLog>

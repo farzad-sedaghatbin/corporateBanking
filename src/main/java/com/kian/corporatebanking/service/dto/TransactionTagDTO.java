@@ -2,8 +2,6 @@ package com.kian.corporatebanking.service.dto;
 
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -13,11 +11,9 @@ public class TransactionTagDTO implements Serializable {
 
     private Long id;
 
-    private String lable;
+    private String label;
 
     private Long partyId;
-
-    private Long corporateTransactionId;
 
     public Long getId() {
         return id;
@@ -27,12 +23,12 @@ public class TransactionTagDTO implements Serializable {
         this.id = id;
     }
 
-    public String getLable() {
-        return lable;
+    public String getLabel() {
+        return label;
     }
 
-    public void setLable(String lable) {
-        this.lable = lable;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public Long getPartyId() {
@@ -41,14 +37,6 @@ public class TransactionTagDTO implements Serializable {
 
     public void setPartyId(Long partyId) {
         this.partyId = partyId;
-    }
-
-    public Long getCorporateTransactionId() {
-        return corporateTransactionId;
-    }
-
-    public void setCorporateTransactionId(Long corporateTransactionId) {
-        this.corporateTransactionId = corporateTransactionId;
     }
 
     @Override
@@ -76,7 +64,7 @@ public class TransactionTagDTO implements Serializable {
     public String toString() {
         return "TransactionTagDTO{" +
             "id=" + getId() +
-            ", lable='" + getLable() + "'" +
+            ", label='" + getLabel() + "'" +
             ", partyId=" + getPartyId() +
             "}";
     }
