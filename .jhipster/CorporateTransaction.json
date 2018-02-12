@@ -3,6 +3,12 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
+            "relationshipName": "content",
+            "otherEntityName": "transactionContents",
+            "otherEntityRelationshipName": "corporateTransaction"
+        },
+        {
+            "relationshipType": "one-to-many",
             "relationshipName": "tags",
             "otherEntityName": "transactionTag",
             "otherEntityRelationshipName": "corporateTransaction"

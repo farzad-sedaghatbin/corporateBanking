@@ -67,6 +67,11 @@ public class CorporateTransaction implements Serializable {
     @OneToMany(mappedBy = "corporateTransaction")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<TransactionContents> contents = new HashSet<>();
+
+    @OneToMany(mappedBy = "corporateTransaction")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TransactionTag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "corporateTransaction")
@@ -216,6 +221,31 @@ public class CorporateTransaction implements Serializable {
 
     public void setCreatorId(Long creatorId) {
         this.creatorId = creatorId;
+    }
+
+    public Set<TransactionContents> getContents() {
+        return contents;
+    }
+
+    public CorporateTransaction contents(Set<TransactionContents> transactionContents) {
+        this.contents = transactionContents;
+        return this;
+    }
+
+    public CorporateTransaction addContent(TransactionContents transactionContents) {
+        this.contents.add(transactionContents);
+        transactionContents.setCorporateTransaction(this);
+        return this;
+    }
+
+    public CorporateTransaction removeContent(TransactionContents transactionContents) {
+        this.contents.remove(transactionContents);
+        transactionContents.setCorporateTransaction(null);
+        return this;
+    }
+
+    public void setContents(Set<TransactionContents> transactionContents) {
+        this.contents = transactionContents;
     }
 
     public Set<TransactionTag> getTags() {
