@@ -12,6 +12,7 @@ import org.mapstruct.*;
 public interface CorporateTransactionMapper extends EntityMapper<CorporateTransactionDTO, CorporateTransaction> {
 
 
+    @Mapping(target = "contents", ignore = true)
     @Mapping(target = "tags", ignore = true)
     @Mapping(target = "descriptions", ignore = true)
     @Mapping(target = "signers", ignore = true)

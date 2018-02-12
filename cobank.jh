@@ -8,8 +8,12 @@ fromAccountId Long,
 toAccountId Long,
 trackingCode String,
 status TransactionStatus,
-creatorId Long
+creatorId Long,
+transactionType TransactionType
 
+}
+enum TransactionType{
+	DEPOSIT , WITHDRAW
 }
 enum TransactionStatus{
 	CREATE , DONE
@@ -40,7 +44,13 @@ comment String
  enum OperationType{
  REJECT , APPROVE
  }
+entity TransactionContents{
+content Blob
+}
 
+relationship OneToMany{
+  CorporateTransaction {content} to TransactionContents
+}
 relationship OneToMany{
   CorporateTransaction {tags} to TransactionTag
 }
