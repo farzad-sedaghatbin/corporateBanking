@@ -57,7 +57,7 @@ relationship OneToMany{
   CorporateTransaction {content} to TransactionContents
 }
 relationship ManyToMany{
-  CorporateTransaction {tags} to TransactionTag
+ TransactionTag  {tags} to CorporateTransaction
 }
 relationship OneToMany{
   CorporateTransaction {descriptions} to TransactionDescription
