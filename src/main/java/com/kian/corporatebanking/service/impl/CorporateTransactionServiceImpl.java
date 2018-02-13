@@ -69,7 +69,7 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
     @Transactional(readOnly = true)
     public CorporateTransactionDTO findOne(Long id) {
         log.debug("Request to get CorporateTransaction : {}", id);
-        CorporateTransaction corporateTransaction = corporateTransactionRepository.findOneWithEagerRelationships(id);
+        CorporateTransaction corporateTransaction = corporateTransactionRepository.findOne(id);
         return corporateTransactionMapper.toDto(corporateTransaction);
     }
 

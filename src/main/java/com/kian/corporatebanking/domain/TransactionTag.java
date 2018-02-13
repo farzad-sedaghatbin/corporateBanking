@@ -6,6 +6,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -28,6 +30,13 @@ public class TransactionTag implements Serializable {
 
     @Column(name = "party_id")
     private Long partyId;
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "transaction_tag_tags",
+               joinColumns = @JoinColumn(name="transaction_tags_id", referencedColumnName="id"),
+               inverseJoinColumns = @JoinColumn(name="tags_id", referencedColumnName="id"))
+    private Set<CorporateTransaction> tags = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -62,6 +71,29 @@ public class TransactionTag implements Serializable {
 
     public void setPartyId(Long partyId) {
         this.partyId = partyId;
+    }
+
+    public Set<CorporateTransaction> getTags() {
+        return tags;
+    }
+
+    public TransactionTag tags(Set<CorporateTransaction> corporateTransactions) {
+        this.tags = corporateTransactions;
+        return this;
+    }
+
+    public TransactionTag addTags(CorporateTransaction corporateTransaction) {
+        this.tags.add(corporateTransaction);
+        return this;
+    }
+
+    public TransactionTag removeTags(CorporateTransaction corporateTransaction) {
+        this.tags.remove(corporateTransaction);
+        return this;
+    }
+
+    public void setTags(Set<CorporateTransaction> corporateTransactions) {
+        this.tags = corporateTransactions;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

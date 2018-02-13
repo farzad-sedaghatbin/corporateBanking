@@ -69,7 +69,7 @@ public class TransactionTagServiceImpl implements TransactionTagService {
     @Transactional(readOnly = true)
     public TransactionTagDTO findOne(Long id) {
         log.debug("Request to get TransactionTag : {}", id);
-        TransactionTag transactionTag = transactionTagRepository.findOne(id);
+        TransactionTag transactionTag = transactionTagRepository.findOneWithEagerRelationships(id);
         return transactionTagMapper.toDto(transactionTag);
     }
 
