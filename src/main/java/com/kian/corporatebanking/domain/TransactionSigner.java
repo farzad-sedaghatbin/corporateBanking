@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
 
+import com.kian.corporatebanking.domain.enumeration.OperationType;
+
 import com.kian.corporatebanking.domain.enumeration.RoleType;
 
 /**
@@ -30,6 +32,10 @@ public class TransactionSigner implements Serializable {
 
     @Column(name = "sign_order")
     private Integer signOrder;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "operation_type")
+    private OperationType operationType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_type")
@@ -66,6 +72,19 @@ public class TransactionSigner implements Serializable {
 
     public void setSignOrder(Integer signOrder) {
         this.signOrder = signOrder;
+    }
+
+    public OperationType getOperationType() {
+        return operationType;
+    }
+
+    public TransactionSigner operationType(OperationType operationType) {
+        this.operationType = operationType;
+        return this;
+    }
+
+    public void setOperationType(OperationType operationType) {
+        this.operationType = operationType;
     }
 
     public RoleType getRoleType() {
@@ -158,6 +177,7 @@ public class TransactionSigner implements Serializable {
         return "TransactionSigner{" +
             "id=" + getId() +
             ", signOrder=" + getSignOrder() +
+            ", operationType='" + getOperationType() + "'" +
             ", roleType='" + getRoleType() + "'" +
             ", partId=" + getPartId() +
             "}";

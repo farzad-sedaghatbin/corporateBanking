@@ -8,15 +8,13 @@ fromAccountId Long,
 toAccountId Long,
 trackingCode String,
 status TransactionStatus,
-creatorId Long,
-transactionType TransactionType
-
+creatorId Long
 }
 enum TransactionType{
 	DEPOSIT , WITHDRAW
 }
 enum TransactionStatus{
-	CREATE , DONE
+	CREATE , DONE 
 }
 enum TransactionType {
     RTGS , ACH
@@ -32,6 +30,7 @@ partyId Long
 }
 entity TransactionSigner{
 signOrder Integer,
+operationType OperationType,
 roleType RoleType,
 partId Long
 }
@@ -43,7 +42,7 @@ comment String
 
 }
  enum OperationType{
- REJECT , APPROVE
+ REJECT , APPROVE , NOTHING
  }
  
  enum RoleType{

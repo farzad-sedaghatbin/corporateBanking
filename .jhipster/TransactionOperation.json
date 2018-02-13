@@ -16,7 +16,7 @@
         {
             "fieldName": "operationType",
             "fieldType": "OperationType",
-            "fieldValues": "REJECT,APPROVE"
+            "fieldValues": "REJECT,APPROVE,NOTHING"
         },
         {
             "fieldName": "comment",
