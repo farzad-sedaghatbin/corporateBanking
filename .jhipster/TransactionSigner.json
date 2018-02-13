@@ -20,6 +20,11 @@
             "fieldType": "Integer"
         },
         {
+            "fieldName": "operationType",
+            "fieldType": "OperationType",
+            "fieldValues": "REJECT,APPROVE,NOTHING"
+        },
+        {
             "fieldName": "roleType",
             "fieldType": "RoleType",
             "fieldValues": "MAKER,CHECKER"

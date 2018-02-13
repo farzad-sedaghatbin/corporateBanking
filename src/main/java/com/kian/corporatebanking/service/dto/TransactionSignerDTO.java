@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import com.kian.corporatebanking.domain.enumeration.OperationType;
 import com.kian.corporatebanking.domain.enumeration.RoleType;
 
 /**
@@ -15,6 +16,8 @@ public class TransactionSignerDTO implements Serializable {
     private Long id;
 
     private Integer signOrder;
+
+    private OperationType operationType;
 
     private RoleType roleType;
 
@@ -36,6 +39,14 @@ public class TransactionSignerDTO implements Serializable {
 
     public void setSignOrder(Integer signOrder) {
         this.signOrder = signOrder;
+    }
+
+    public OperationType getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(OperationType operationType) {
+        this.operationType = operationType;
     }
 
     public RoleType getRoleType() {
@@ -88,6 +99,7 @@ public class TransactionSignerDTO implements Serializable {
         return "TransactionSignerDTO{" +
             "id=" + getId() +
             ", signOrder=" + getSignOrder() +
+            ", operationType='" + getOperationType() + "'" +
             ", roleType='" + getRoleType() + "'" +
             ", partId=" + getPartId() +
             "}";
