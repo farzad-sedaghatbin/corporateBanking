@@ -37,8 +37,6 @@ public class CorporateTransactionDTO implements Serializable {
 
     private Long creatorId;
 
-    private Set<TransactionTagDTO> tags = new HashSet<>();
-
     public Long getId() {
         return id;
     }
@@ -125,14 +123,6 @@ public class CorporateTransactionDTO implements Serializable {
 
     public void setCreatorId(Long creatorId) {
         this.creatorId = creatorId;
-    }
-
-    public Set<TransactionTagDTO> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<TransactionTagDTO> transactionTags) {
-        this.tags = transactionTags;
     }
 
     @Override
