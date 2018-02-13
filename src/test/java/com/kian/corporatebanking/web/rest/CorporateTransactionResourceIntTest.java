@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -47,6 +48,8 @@ import com.kian.corporatebanking.domain.enumeration.TransactionStatus;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CorporateBankingApp.class)
+
+@Commit
 public class CorporateTransactionResourceIntTest {
 
     private static final ZonedDateTime DEFAULT_CREATE_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
@@ -107,7 +110,7 @@ public class CorporateTransactionResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CorporateTransactionResource corporateTransactionResource = new CorporateTransactionResource(corporateTransactionService);
+        final CorporateTransactionResource corporateTransactionResource = new CorporateTransactionResource(corporateTransactionService, transactionSignerService);
         this.restCorporateTransactionMockMvc = MockMvcBuilders.standaloneSetup(corporateTransactionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

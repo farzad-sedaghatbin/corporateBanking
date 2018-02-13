@@ -22,16 +22,14 @@ spring:
     cache:
         type: simple
     datasource:
-        type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:corporateBanking;DB_CLOSE_DELAY=-1
-        name:
-        username:
-        password:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:postgresql://localhost:5432/corporatebank
+          username: postgres
+          password: arsham
     jpa:
-        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
-        database: H2
-        open-in-view: false
-        show-sql: false
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
+        database: POSTGRESQL
+        show-sql: true
         hibernate:
             ddl-auto: none
             naming:
@@ -54,7 +52,7 @@ spring:
         mode: XHTML
 
 liquibase:
-    contexts: test
+    contexts: dev
 
 server:
     port: 10344
