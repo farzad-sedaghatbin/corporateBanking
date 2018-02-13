@@ -49,6 +49,7 @@ public class CacheConfiguration {
             cm.createCache(com.kian.corporatebanking.domain.TransactionOperation.class.getName(), jcacheConfiguration);
             cm.createCache(com.kian.corporatebanking.domain.CorporateTransaction.class.getName() + ".contents", jcacheConfiguration);
             cm.createCache(com.kian.corporatebanking.domain.TransactionContents.class.getName(), jcacheConfiguration);
+            cm.createCache(com.kian.corporatebanking.domain.TransactionTag.class.getName() + ".tags", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

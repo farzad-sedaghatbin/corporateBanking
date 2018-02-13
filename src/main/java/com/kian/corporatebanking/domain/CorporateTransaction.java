@@ -79,13 +79,6 @@ public class CorporateTransaction implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TransactionSigner> signers = new HashSet<>();
 
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "corporate_transaction_tags",
-               joinColumns = @JoinColumn(name="corporate_transactions_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="tags_id", referencedColumnName="id"))
-    private Set<TransactionTag> tags = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -298,29 +291,6 @@ public class CorporateTransaction implements Serializable {
 
     public void setSigners(Set<TransactionSigner> transactionSigners) {
         this.signers = transactionSigners;
-    }
-
-    public Set<TransactionTag> getTags() {
-        return tags;
-    }
-
-    public CorporateTransaction tags(Set<TransactionTag> transactionTags) {
-        this.tags = transactionTags;
-        return this;
-    }
-
-    public CorporateTransaction addTags(TransactionTag transactionTag) {
-        this.tags.add(transactionTag);
-        return this;
-    }
-
-    public CorporateTransaction removeTags(TransactionTag transactionTag) {
-        this.tags.remove(transactionTag);
-        return this;
-    }
-
-    public void setTags(Set<TransactionTag> transactionTags) {
-        this.tags = transactionTags;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
