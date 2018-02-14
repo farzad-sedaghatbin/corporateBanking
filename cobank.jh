@@ -14,7 +14,7 @@ enum TransactionType{
 	DEPOSIT , WITHDRAW
 }
 enum TransactionStatus{
-	CREATE , DONE 
+	CREATE , DONE , REJECT , READY
 }
 enum TransactionType {
     RTGS , ACH
