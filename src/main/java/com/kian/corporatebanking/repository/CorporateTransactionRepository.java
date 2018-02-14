@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 
-import java.util.List;
-
 
 /**
  * Spring Data JPA repository for the CorporateTransaction entity.
@@ -14,7 +12,5 @@ import java.util.List;
 @SuppressWarnings("unused")
 @Repository
 public interface CorporateTransactionRepository extends JpaRepository<CorporateTransaction, Long> {
-
-    List<CorporateTransaction> findByCreatorIdAndFromAccountId(Long creatorId, Long fromAccountId);
 
 }

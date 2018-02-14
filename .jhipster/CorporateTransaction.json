@@ -57,7 +57,7 @@
         {
             "fieldName": "status",
             "fieldType": "TransactionStatus",
-            "fieldValues": "CREATE,DONE"
+            "fieldValues": "CREATE,DONE,REJECT,READY"
         },
         {
             "fieldName": "creatorId",

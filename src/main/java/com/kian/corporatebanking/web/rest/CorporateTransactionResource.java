@@ -2,13 +2,16 @@ package com.kian.corporatebanking.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.kian.corporatebanking.service.CorporateTransactionService;
-import com.kian.corporatebanking.service.TransactionSignerService;
 import com.kian.corporatebanking.web.rest.errors.BadRequestAlertException;
 import com.kian.corporatebanking.web.rest.util.HeaderUtil;
+import com.kian.corporatebanking.web.rest.util.PaginationUtil;
 import com.kian.corporatebanking.service.dto.CorporateTransactionDTO;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,11 +34,9 @@ public class CorporateTransactionResource {
     private static final String ENTITY_NAME = "corporateTransaction";
 
     private final CorporateTransactionService corporateTransactionService;
-    private final TransactionSignerService transactionSignerService;
 
-    public CorporateTransactionResource(CorporateTransactionService corporateTransactionService, TransactionSignerService transactionSignerService) {
+    public CorporateTransactionResource(CorporateTransactionService corporateTransactionService) {
         this.corporateTransactionService = corporateTransactionService;
-        this.transactionSignerService = transactionSignerService;
     }
 
     /**
@@ -84,20 +84,16 @@ public class CorporateTransactionResource {
     /**
      * GET  /corporate-transactions : get all the corporateTransactions.
      *
-     * @param id the pagination information
+     * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of corporateTransactions in body
      */
-    @GetMapping("/corporate-transactions/{id}")
+    @GetMapping("/corporate-transactions")
     @Timed
-    public ResponseEntity<List<CorporateTransactionDTO>> getAllCorporateTransactions(@PathVariable Long id) {
+    public ResponseEntity<List<CorporateTransactionDTO>> getAllCorporateTransactions(Pageable pageable) {
         log.debug("REST request to get a page of CorporateTransactions");
-        //todo find party from token
-        List<CorporateTransactionDTO> corporateTransactionDTOS = corporateTransactionService.findByCreatorIdAndFromAccountId(1l, id);
-        if (corporateTransactionDTOS == null) {
-            corporateTransactionDTOS = new ArrayList<>();
-        }
-        corporateTransactionDTOS.addAll(transactionSignerService.getAllCorporateTransactionByPartyId(1l));
-        return ResponseEntity.ok(corporateTransactionDTOS);
+        Page<CorporateTransactionDTO> page = corporateTransactionService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/corporate-transactions");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
@@ -106,7 +102,7 @@ public class CorporateTransactionResource {
      * @param id the id of the corporateTransactionDTO to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the corporateTransactionDTO, or with status 404 (Not Found)
      */
-    @GetMapping("/detail-corporate-transactions/{id}")
+    @GetMapping("/corporate-transactions/{id}")
     @Timed
     public ResponseEntity<CorporateTransactionDTO> getCorporateTransaction(@PathVariable Long id) {
         log.debug("REST request to get CorporateTransaction : {}", id);
