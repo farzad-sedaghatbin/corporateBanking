@@ -1,16 +1,31 @@
 package com.kian.corporatebanking.service.impl;
 
+import com.kian.corporatebanking.domain.TransactionContents;
+import com.kian.corporatebanking.domain.TransactionSigner;
+import com.kian.corporatebanking.domain.enumeration.OperationType;
+import com.kian.corporatebanking.domain.enumeration.RoleType;
+import com.kian.corporatebanking.domain.enumeration.TransactionStatus;
 import com.kian.corporatebanking.service.CorporateTransactionService;
 import com.kian.corporatebanking.domain.CorporateTransaction;
 import com.kian.corporatebanking.repository.CorporateTransactionRepository;
+import com.kian.corporatebanking.service.TransactionContentsService;
+import com.kian.corporatebanking.service.TransactionSignerService;
 import com.kian.corporatebanking.service.dto.CorporateTransactionDTO;
+import com.kian.corporatebanking.service.dto.TransactionContentsDTO;
+import com.kian.corporatebanking.service.dto.TransactionSignerDTO;
 import com.kian.corporatebanking.service.mapper.CorporateTransactionMapper;
+import com.kian.corporatebanking.service.mapper.TransactionContentsMapper;
+import com.kian.corporatebanking.service.mapper.TransactionSignerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 
 /**
@@ -25,10 +40,19 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
     private final CorporateTransactionRepository corporateTransactionRepository;
 
     private final CorporateTransactionMapper corporateTransactionMapper;
+    private final TransactionContentsMapper transactionContentsMapper;
+    private final TransactionSignerMapper transactionSignerMapper;
+    private final TransactionContentsService transactionContentsService;
+    private final TransactionSignerService transactionSignerService;
 
-    public CorporateTransactionServiceImpl(CorporateTransactionRepository corporateTransactionRepository, CorporateTransactionMapper corporateTransactionMapper) {
+
+    public CorporateTransactionServiceImpl(CorporateTransactionRepository corporateTransactionRepository, CorporateTransactionMapper corporateTransactionMapper, TransactionContentsMapper transactionContentsMapper, TransactionSignerMapper transactionSignerMapper, TransactionContentsService transactionContentsService, TransactionSignerService transactionSignerService) {
         this.corporateTransactionRepository = corporateTransactionRepository;
         this.corporateTransactionMapper = corporateTransactionMapper;
+        this.transactionContentsMapper = transactionContentsMapper;
+        this.transactionSignerMapper = transactionSignerMapper;
+        this.transactionContentsService = transactionContentsService;
+        this.transactionSignerService = transactionSignerService;
     }
 
     /**
@@ -40,8 +64,44 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
     @Override
     public CorporateTransactionDTO save(CorporateTransactionDTO corporateTransactionDTO) {
         log.debug("Request to save CorporateTransaction : {}", corporateTransactionDTO);
+        corporateTransactionDTO.setStatus(TransactionStatus.CREATE);
         CorporateTransaction corporateTransaction = corporateTransactionMapper.toEntity(corporateTransactionDTO);
         corporateTransaction = corporateTransactionRepository.save(corporateTransaction);
+        if (corporateTransactionDTO.getContent() != null) {
+            TransactionContentsDTO transactionContentsDTO = new TransactionContentsDTO();
+            transactionContentsDTO.setContent(Base64.getDecoder().decode(corporateTransactionDTO.getContent()));
+            transactionContentsDTO.setCorporateTransactionId(corporateTransaction.getId());
+            transactionContentsDTO = transactionContentsService.save(transactionContentsDTO);
+            TransactionContents transactionContents = transactionContentsMapper.toEntity(transactionContentsDTO);
+
+        }
+
+        //todo : fetch relative signers
+        if(!corporateTransactionDTO.isDraft()) {
+
+            TransactionSignerDTO dto = new TransactionSignerDTO();
+            dto.setPartId(1l);
+            dto.setRoleType(RoleType.CHECKER);
+            dto.setOperationType(OperationType.NOTHING);
+            TransactionSignerDTO dto2 = new TransactionSignerDTO();
+            dto2.setPartId(2l);
+            dto2.setOperationType(OperationType.NOTHING);
+            dto2.setRoleType(RoleType.CHECKER);
+            TransactionSignerDTO dto3 = new TransactionSignerDTO();
+            dto3.setPartId(3l);
+            dto3.setRoleType(RoleType.MAKER);
+            dto3.setOperationType(OperationType.NOTHING);
+            List<TransactionSignerDTO> signerDTOS = new ArrayList<>();
+            signerDTOS.add(dto);
+            signerDTOS.add(dto2);
+            signerDTOS.add(dto3);
+            CorporateTransaction finalCorporateTransaction = corporateTransaction;
+            signerDTOS.forEach(signer -> {
+                signer.setCorporateTransactionId(finalCorporateTransaction.getId());
+                transactionSignerService.save(signer);
+
+            });
+        }
         return corporateTransactionMapper.toDto(corporateTransaction);
     }
 
@@ -82,5 +142,26 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
     public void delete(Long id) {
         log.debug("Request to delete CorporateTransaction : {}", id);
         corporateTransactionRepository.delete(id);
+    }
+
+    @Override
+    public void checkStatus(CorporateTransaction corporateTransaction) {
+        List<TransactionSignerDTO> signerList = transactionSignerService.findByCorporateTransaction(corporateTransaction);
+        long rejectCount = signerList.stream().filter(signer -> signer.getOperationType().equals(OperationType.REJECT)).count();
+        if (rejectCount > 0) {
+            corporateTransaction.setStatus(TransactionStatus.REJECT);
+            save(corporateTransactionMapper.toDto(corporateTransaction));
+        } else {
+            long signCount = signerList.stream().filter(signer -> signer.getOperationType().equals(OperationType.APPROVE) && signer.getRoleType().equals(RoleType.MAKER)).count();
+            if (signCount == signerList.size() - 1) {
+                corporateTransaction.setStatus(TransactionStatus.READY);
+
+            }
+        }
+    }
+
+    @Override
+    public List<CorporateTransactionDTO> findByCreatorIdAndFromAccountId(Long creatorId, Long fromAccountId) {
+        return corporateTransactionRepository.findByCreatorIdAndFromAccountId(creatorId, fromAccountId);
     }
 }

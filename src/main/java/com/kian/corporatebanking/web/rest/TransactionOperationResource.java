@@ -1,7 +1,9 @@
 package com.kian.corporatebanking.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.kian.corporatebanking.domain.enumeration.OperationType;
 import com.kian.corporatebanking.service.TransactionOperationService;
+import com.kian.corporatebanking.service.dto.TransactionSignerDTO;
 import com.kian.corporatebanking.web.rest.errors.BadRequestAlertException;
 import com.kian.corporatebanking.web.rest.util.HeaderUtil;
 import com.kian.corporatebanking.web.rest.util.PaginationUtil;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +62,15 @@ public class TransactionOperationResource {
             .body(result);
     }
 
+    @PostMapping("/approved")
+    @Timed
+    public ResponseEntity<Void> createTransactionSigner(@RequestBody TransactionOperationDTO transactionOperationDTO) throws URISyntaxException {
+        log.debug("REST request to Approved TransactionSigner : {}", transactionOperationDTO);
+        //todo fetch signer record from token
+        transactionOperationDTO.setOperationDate(ZonedDateTime.now());
+        transactionOperationDTO.setOperationType(OperationType.APPROVE);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, transactionOperationDTO.getId().toString())).build();
+    }
     /**
      * PUT  /transaction-operations : Updates an existing transactionOperation.
      *

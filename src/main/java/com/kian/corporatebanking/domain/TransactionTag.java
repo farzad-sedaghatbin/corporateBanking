@@ -33,8 +33,8 @@ public class TransactionTag implements Serializable {
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "transaction_tag_tags",
-               joinColumns = @JoinColumn(name="transaction_tags_id", referencedColumnName="id"),
+    @JoinTable(name = "corporate_transaction_tags",
+               joinColumns = @JoinColumn(name="corporate_transactions_id", referencedColumnName="id"),
                inverseJoinColumns = @JoinColumn(name="tags_id", referencedColumnName="id"))
     private Set<CorporateTransaction> tags = new HashSet<>();
 

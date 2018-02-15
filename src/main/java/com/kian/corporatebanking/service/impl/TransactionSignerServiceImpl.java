@@ -1,9 +1,12 @@
 package com.kian.corporatebanking.service.impl;
 
+import com.kian.corporatebanking.domain.CorporateTransaction;
 import com.kian.corporatebanking.service.TransactionSignerService;
 import com.kian.corporatebanking.domain.TransactionSigner;
 import com.kian.corporatebanking.repository.TransactionSignerRepository;
+import com.kian.corporatebanking.service.dto.CorporateTransactionDTO;
 import com.kian.corporatebanking.service.dto.TransactionSignerDTO;
+import com.kian.corporatebanking.service.mapper.CorporateTransactionMapper;
 import com.kian.corporatebanking.service.mapper.TransactionSignerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -26,9 +34,12 @@ public class TransactionSignerServiceImpl implements TransactionSignerService {
 
     private final TransactionSignerMapper transactionSignerMapper;
 
-    public TransactionSignerServiceImpl(TransactionSignerRepository transactionSignerRepository, TransactionSignerMapper transactionSignerMapper) {
+    private final CorporateTransactionMapper corporateTransactionMapper;
+
+    public TransactionSignerServiceImpl(TransactionSignerRepository transactionSignerRepository, TransactionSignerMapper transactionSignerMapper, CorporateTransactionMapper corporateTransactionMapper) {
         this.transactionSignerRepository = transactionSignerRepository;
         this.transactionSignerMapper = transactionSignerMapper;
+        this.corporateTransactionMapper = corporateTransactionMapper;
     }
 
     /**
@@ -82,5 +93,20 @@ public class TransactionSignerServiceImpl implements TransactionSignerService {
     public void delete(Long id) {
         log.debug("Request to delete TransactionSigner : {}", id);
         transactionSignerRepository.delete(id);
+    }
+
+    @Override
+    public List<TransactionSignerDTO> findByCorporateTransaction(CorporateTransaction corporateTransaction) {
+        return transactionSignerRepository.findByCorporateTransaction(corporateTransaction).stream().map(transactionSignerMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TransactionSignerDTO> findByPartyId(Long partyId) {
+        return transactionSignerRepository.findByPartId(partyId).stream().map(transactionSignerMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CorporateTransactionDTO> getAllCorporateTransactionByPartyId(Long partyId) {
+        return Optional.ofNullable(transactionSignerRepository.findByPartId(partyId).stream().map(TransactionSigner::getCorporateTransaction).collect(Collectors.toList()).stream().map(corporateTransactionMapper::toDto).collect(Collectors.toList())).orElse(new ArrayList<>());
     }
 }
