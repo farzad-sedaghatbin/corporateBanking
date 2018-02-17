@@ -19,4 +19,6 @@ public interface TransactionTagRepository extends JpaRepository<TransactionTag, 
     @Query("select transaction_tag from TransactionTag transaction_tag left join fetch transaction_tag.tags where transaction_tag.id =:id")
     TransactionTag findOneWithEagerRelationships(@Param("id") Long id);
 
+    TransactionTag findByPartyIdAndLabel(Long partyId,String label);
+
 }

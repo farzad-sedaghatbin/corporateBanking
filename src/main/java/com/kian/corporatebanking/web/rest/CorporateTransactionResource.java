@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.kian.corporatebanking.domain.enumeration.TransactionStatus;
 import com.kian.corporatebanking.service.CorporateTransactionService;
 import com.kian.corporatebanking.service.TransactionSignerService;
+import com.kian.corporatebanking.service.TransactionTagService;
 import com.kian.corporatebanking.service.dto.DashboardDTO;
 import com.kian.corporatebanking.web.rest.errors.BadRequestAlertException;
 import com.kian.corporatebanking.web.rest.util.HeaderUtil;
@@ -11,16 +12,13 @@ import com.kian.corporatebanking.service.dto.CorporateTransactionDTO;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,10 +34,12 @@ public class CorporateTransactionResource {
 
     private final CorporateTransactionService corporateTransactionService;
     private final TransactionSignerService transactionSignerService;
+    private final TransactionTagService transactionTagService;
 
-    public CorporateTransactionResource(CorporateTransactionService corporateTransactionService, TransactionSignerService transactionSignerService) {
+    public CorporateTransactionResource(CorporateTransactionService corporateTransactionService, TransactionSignerService transactionSignerService, TransactionTagService transactionTagService) {
         this.corporateTransactionService = corporateTransactionService;
         this.transactionSignerService = transactionSignerService;
+        this.transactionTagService = transactionTagService;
     }
 
     /**
@@ -64,10 +64,10 @@ public class CorporateTransactionResource {
 
     @PostMapping("/execute-corporate-transactions")
     @Timed
-    //todo change signiture
+    //todo change signature
     public ResponseEntity<String> executeCorporateTransaction(@RequestBody Long id) throws URISyntaxException {
         log.debug("REST request to execute CorporateTransaction : {}", id);
-        //todo BnkingAPI
+        //todo BankingAPI
         CorporateTransactionDTO result = corporateTransactionService.findOne(id);
         result.setStatus(TransactionStatus.DONE);
         corporateTransactionService.save(result);
@@ -116,9 +116,33 @@ public class CorporateTransactionResource {
         DashboardDTO dashboardDTO = new DashboardDTO();
         dashboardDTO.setReadyList(corporateTransactionDTOS.stream().filter(dto -> dto.getStatus().equals(TransactionStatus.READY)).collect(Collectors.toList()));
         //todo change DTO and find mine an others
-        dashboardDTO.setMineList(corporateTransactionDTOS.stream().filter(dto -> !dto.getStatus().equals(TransactionStatus.READY)).collect(Collectors.toList()));
-        dashboardDTO.setOtherList(corporateTransactionDTOS.stream().filter(dto -> !dto.getStatus().equals(TransactionStatus.READY)).collect(Collectors.toList()));
+        dashboardDTO.setMineList(corporateTransactionDTOS.stream().filter(dto -> !dto.getStatus().equals(TransactionStatus.CREATE)).collect(Collectors.toList()));
+        dashboardDTO.setOtherList(corporateTransactionDTOS.stream().filter(dto -> !dto.getStatus().equals(TransactionStatus.CREATE)).collect(Collectors.toList()));
 
+        return ResponseEntity.ok(corporateTransactionDTOS);
+    }
+
+
+    @GetMapping("/corporate-transactions-by-tags/{label}")
+    @Timed
+    public ResponseEntity<Set<CorporateTransactionDTO>> allCorporateTransactionsByTag(@PathVariable String label) {
+        log.debug("REST request to get a page of CorporateTransactions");
+        //todo find party from token
+        Set<CorporateTransactionDTO> corporateTransactionDTOS = transactionTagService.findByPartyIdAndLabel(1l, label).getTags();
+        if (corporateTransactionDTOS == null) {
+            corporateTransactionDTOS = new HashSet<>();
+        }
+        return ResponseEntity.ok(corporateTransactionDTOS);
+    }
+   @GetMapping("/corporate-transactions-by-party/{contactId}")
+    @Timed
+    public ResponseEntity<List<CorporateTransactionDTO>> allCorporateTransactionsByToParty(@PathVariable Long contactId) {
+        log.debug("REST request to get a page of CorporateTransactions");
+        //todo find party from token find contact from contact
+        List<CorporateTransactionDTO> corporateTransactionDTOS = corporateTransactionService.findByToAccountId(contactId);
+        if (corporateTransactionDTOS == null) {
+            corporateTransactionDTOS = new ArrayList<>();
+        }
         return ResponseEntity.ok(corporateTransactionDTOS);
     }
 
@@ -133,6 +157,7 @@ public class CorporateTransactionResource {
     public ResponseEntity<CorporateTransactionDTO> getCorporateTransaction(@PathVariable Long id) {
         log.debug("REST request to get CorporateTransaction : {}", id);
         CorporateTransactionDTO corporateTransactionDTO = corporateTransactionService.findOne(id);
+        //todo fetch eager for toAccount from contact
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(corporateTransactionDTO));
     }
 

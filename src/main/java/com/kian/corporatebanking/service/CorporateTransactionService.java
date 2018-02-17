@@ -46,4 +46,7 @@ public interface CorporateTransactionService {
     void checkStatus(CorporateTransaction corporateTransaction);
 
     List<CorporateTransactionDTO> findByCreatorIdAndFromAccountId(Long creatorId,Long transactionId);
+
+    List<CorporateTransactionDTO> findByToAccountId(Long toAccountId);
+
 }

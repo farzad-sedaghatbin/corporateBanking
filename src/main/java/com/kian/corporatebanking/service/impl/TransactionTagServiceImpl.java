@@ -83,4 +83,9 @@ public class TransactionTagServiceImpl implements TransactionTagService {
         log.debug("Request to delete TransactionTag : {}", id);
         transactionTagRepository.delete(id);
     }
+
+    @Override
+    public TransactionTagDTO findByPartyIdAndLabel(Long partyId, String label) {
+        return transactionTagMapper.toDto(transactionTagRepository.findByPartyIdAndLabel(partyId, label));
+    }
 }

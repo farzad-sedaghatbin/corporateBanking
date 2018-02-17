@@ -6,6 +6,7 @@ import com.kian.corporatebanking.domain.CorporateTransaction;
 import com.kian.corporatebanking.repository.CorporateTransactionRepository;
 import com.kian.corporatebanking.service.CorporateTransactionService;
 import com.kian.corporatebanking.service.TransactionSignerService;
+import com.kian.corporatebanking.service.TransactionTagService;
 import com.kian.corporatebanking.service.dto.CorporateTransactionDTO;
 import com.kian.corporatebanking.service.mapper.CorporateTransactionMapper;
 import com.kian.corporatebanking.web.rest.errors.ExceptionTranslator;
@@ -109,11 +110,12 @@ public class CorporateTransactionResourceIntTest {
     private MockMvc restCorporateTransactionMockMvc;
 
     private CorporateTransaction corporateTransaction;
+    private TransactionTagService transactionTagService;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CorporateTransactionResource corporateTransactionResource = new CorporateTransactionResource(corporateTransactionService, transactionSignerService);
+        final CorporateTransactionResource corporateTransactionResource = new CorporateTransactionResource(corporateTransactionService, transactionSignerService, transactionTagService);
         this.restCorporateTransactionMockMvc = MockMvcBuilders.standaloneSetup(corporateTransactionResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

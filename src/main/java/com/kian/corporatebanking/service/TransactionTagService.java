@@ -39,4 +39,7 @@ public interface TransactionTagService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    TransactionTagDTO findByPartyIdAndLabel(Long partyId,String label);
+
 }

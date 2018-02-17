@@ -59,7 +59,7 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
      * Save a corporateTransaction.
      *
      * @param corporateTransactionDTO the entity to save
-     * @return the persisted entity
+     * @return the persisted entity`
      */
     @Override
     public CorporateTransactionDTO save(CorporateTransactionDTO corporateTransactionDTO) {
@@ -162,6 +162,11 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
 
     @Override
     public List<CorporateTransactionDTO> findByCreatorIdAndFromAccountId(Long creatorId, Long fromAccountId) {
-        return corporateTransactionRepository.findByCreatorIdAndFromAccountId(creatorId, fromAccountId);
+        return corporateTransactionMapper.toDto(corporateTransactionRepository.findByCreatorIdAndFromAccountId(creatorId, fromAccountId));
+    }
+
+    @Override
+    public List<CorporateTransactionDTO> findByToAccountId(Long toAccountId) {
+        return corporateTransactionMapper.toDto(corporateTransactionRepository.findByToAccountId(toAccountId));
     }
 }
