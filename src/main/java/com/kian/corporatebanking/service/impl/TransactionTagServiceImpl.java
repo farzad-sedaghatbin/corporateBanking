@@ -1,9 +1,11 @@
 package com.kian.corporatebanking.service.impl;
 
+import com.kian.corporatebanking.service.CorporateTransactionService;
 import com.kian.corporatebanking.service.TransactionTagService;
 import com.kian.corporatebanking.domain.TransactionTag;
 import com.kian.corporatebanking.repository.TransactionTagRepository;
 import com.kian.corporatebanking.service.dto.TransactionTagDTO;
+import com.kian.corporatebanking.service.mapper.CorporateTransactionMapper;
 import com.kian.corporatebanking.service.mapper.TransactionTagMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +27,14 @@ public class TransactionTagServiceImpl implements TransactionTagService {
     private final TransactionTagRepository transactionTagRepository;
 
     private final TransactionTagMapper transactionTagMapper;
+    private final CorporateTransactionService corporateTransactionService;
+    private final CorporateTransactionMapper corporateTransactionMapper;
 
-    public TransactionTagServiceImpl(TransactionTagRepository transactionTagRepository, TransactionTagMapper transactionTagMapper) {
+    public TransactionTagServiceImpl(TransactionTagRepository transactionTagRepository, TransactionTagMapper transactionTagMapper, CorporateTransactionService corporateTransactionService, CorporateTransactionMapper corporateTransactionMapper) {
         this.transactionTagRepository = transactionTagRepository;
         this.transactionTagMapper = transactionTagMapper;
+        this.corporateTransactionService = corporateTransactionService;
+        this.corporateTransactionMapper = corporateTransactionMapper;
     }
 
     /**
@@ -41,6 +47,9 @@ public class TransactionTagServiceImpl implements TransactionTagService {
     public TransactionTagDTO save(TransactionTagDTO transactionTagDTO) {
         log.debug("Request to save TransactionTag : {}", transactionTagDTO);
         TransactionTag transactionTag = transactionTagMapper.toEntity(transactionTagDTO);
+        if (transactionTagDTO.getCorporateTransactionId() != null) {
+            transactionTag.getCorporateTransactions().add(corporateTransactionMapper.toEntity(corporateTransactionService.findOne(transactionTagDTO.getCorporateTransactionId())));
+        }
         transactionTag = transactionTagRepository.save(transactionTag);
         return transactionTagMapper.toDto(transactionTag);
     }
@@ -69,7 +78,7 @@ public class TransactionTagServiceImpl implements TransactionTagService {
     @Transactional(readOnly = true)
     public TransactionTagDTO findOne(Long id) {
         log.debug("Request to get TransactionTag : {}", id);
-        TransactionTag transactionTag = transactionTagRepository.findOneWithEagerRelationships(id);
+        TransactionTag transactionTag = transactionTagRepository.findOne(id);
         return transactionTagMapper.toDto(transactionTag);
     }
 

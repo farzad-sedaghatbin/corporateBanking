@@ -36,7 +36,7 @@ public class TransactionOperation implements Serializable {
     @Column(name = "jhi_comment")
     private String comment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private TransactionSigner transactionSigner;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

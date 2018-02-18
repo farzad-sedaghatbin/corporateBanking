@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service Interface for managing TransactionSigner.
@@ -45,10 +46,10 @@ public interface TransactionSignerService {
      */
     void delete(Long id);
 
-    List<TransactionSignerDTO> findByCorporateTransaction(CorporateTransaction corporateTransaction);
+    Set<TransactionSignerDTO> findByCorporateTransaction(CorporateTransaction corporateTransaction);
 
-    List<TransactionSignerDTO> findByPartyId(Long partyId);
+    Set<TransactionSignerDTO> findByPartyId(Long partyId);
 
-    List<CorporateTransactionDTO> getAllCorporateTransactionByPartyId(Long partyId);
+    Set<CorporateTransactionDTO> getAllCorporateTransactionByPartyId(Long partyId);
 
 }

@@ -4,7 +4,7 @@
         {
             "relationshipType": "many-to-many",
             "otherEntityRelationshipName": "",
-            "relationshipName": "tags",
+            "relationshipName": "corporateTransactions",
             "otherEntityName": "corporateTransaction",
             "otherEntityField": "id",
             "ownerSide": true

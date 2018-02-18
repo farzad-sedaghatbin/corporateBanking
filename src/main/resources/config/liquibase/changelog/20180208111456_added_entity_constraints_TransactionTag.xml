@@ -7,17 +7,17 @@
         Added the constraints for entity TransactionTag.
     -->
     <changeSet id="20180208111456-2" author="jhipster">
-        
-        <addForeignKeyConstraint baseColumnNames="transaction_tags_id"
-                                 baseTableName="transaction_tag_tags"
-                                 constraintName="fk_transaction_tag_tags_transaction_tags_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="transaction_tag"/>
-        <addForeignKeyConstraint baseColumnNames="tags_id"
-                                 baseTableName="transaction_tag_tags"
-                                 constraintName="fk_transaction_tag_tags_tags_id"
+
+        <addForeignKeyConstraint baseColumnNames="corporate_transactions_id"
+                                 baseTableName="corporate_transaction_tags"
+                                 constraintName="fk_corporate_transaction_tags_tags_id"
                                  referencedColumnNames="id"
                                  referencedTableName="corporate_transaction"/>
-        
+        <addForeignKeyConstraint baseColumnNames="tags_id"
+                                 baseTableName="corporate_transaction_tags"
+                                 constraintName="fk_tags_id_corporate_transaction_tags"
+                                 referencedColumnNames="id"
+                                 referencedTableName="transaction_tag"/>
+
     </changeSet>
 </databaseChangeLog>

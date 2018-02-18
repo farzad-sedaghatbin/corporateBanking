@@ -1,6 +1,8 @@
 package com.kian.corporatebanking.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kian.corporatebanking.service.TransactionTagService;
 import com.kian.corporatebanking.web.rest.errors.BadRequestAlertException;
 import com.kian.corporatebanking.web.rest.util.HeaderUtil;
@@ -39,6 +41,18 @@ public class TransactionTagResource {
         this.transactionTagService = transactionTagService;
     }
 
+
+    public static void main(String[] args) {
+        TransactionTagDTO transactionTagDTO = new TransactionTagDTO();
+        transactionTagDTO.setLabel("food");
+        transactionTagDTO.setPartyId(2l);
+        transactionTagDTO.setCorporateTransactionId(2402l);
+        try {
+            System.out.println(new ObjectMapper().writeValueAsString(transactionTagDTO));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * POST  /transaction-tags : Create a new transactionTag.
      *

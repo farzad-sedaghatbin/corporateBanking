@@ -44,7 +44,7 @@ comment String
  enum OperationType{
  REJECT , APPROVE , NOTHING
  }
- 
+
  enum RoleType{
  MAKER , CHECKER
  }
@@ -56,7 +56,7 @@ relationship OneToMany{
   CorporateTransaction {content} to TransactionContents
 }
 relationship ManyToMany{
- TransactionTag  {tags} to CorporateTransaction
+ TransactionTag  {corporateTransactions} to CorporateTransaction
 }
 relationship OneToMany{
   CorporateTransaction {descriptions} to TransactionDescription

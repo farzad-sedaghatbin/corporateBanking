@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kian.corporatebanking.domain.enumeration.OperationType;
 
 /**
@@ -13,6 +16,18 @@ import com.kian.corporatebanking.domain.enumeration.OperationType;
  */
 public class TransactionOperationDTO implements Serializable {
 
+
+    public static void main(String[] args) {
+        TransactionOperationDTO transactionOperationDTO= new TransactionOperationDTO();
+        transactionOperationDTO.setOperationType(OperationType.APPROVE);
+        transactionOperationDTO.setComment("hello");
+        transactionOperationDTO.setTransactionSignerId(1l);
+        try {
+            System.out.println(new ObjectMapper().writeValueAsString(transactionOperationDTO));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
     private Long id;
 
     private ZonedDateTime operationDate;

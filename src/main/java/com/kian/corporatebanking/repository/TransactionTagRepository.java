@@ -13,11 +13,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 @Repository
 public interface TransactionTagRepository extends JpaRepository<TransactionTag, Long> {
-    @Query("select distinct transaction_tag from TransactionTag transaction_tag left join fetch transaction_tag.tags")
-    List<TransactionTag> findAllWithEagerRelationships();
 
-    @Query("select transaction_tag from TransactionTag transaction_tag left join fetch transaction_tag.tags where transaction_tag.id =:id")
-    TransactionTag findOneWithEagerRelationships(@Param("id") Long id);
 
     TransactionTag findByPartyIdAndLabel(Long partyId,String label);
 

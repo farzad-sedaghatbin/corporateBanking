@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -64,7 +65,7 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
     @Override
     public CorporateTransactionDTO save(CorporateTransactionDTO corporateTransactionDTO) {
         log.debug("Request to save CorporateTransaction : {}", corporateTransactionDTO);
-        corporateTransactionDTO.setStatus(TransactionStatus.CREATE);
+        corporateTransactionDTO.setStatus(TransactionStatus.REJECT);
         CorporateTransaction corporateTransaction = corporateTransactionMapper.toEntity(corporateTransactionDTO);
         corporateTransaction = corporateTransactionRepository.save(corporateTransaction);
         if (corporateTransactionDTO.getContent() != null) {
@@ -77,7 +78,7 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
         }
 
         //todo : fetch relative signers
-        if(!corporateTransactionDTO.isDraft()) {
+        if(!corporateTransactionDTO.isDraft() && corporateTransaction.getId()==null) {
 
             TransactionSignerDTO dto = new TransactionSignerDTO();
             dto.setPartId(1l);
@@ -90,7 +91,7 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
             TransactionSignerDTO dto3 = new TransactionSignerDTO();
             dto3.setPartId(3l);
             dto3.setRoleType(RoleType.MAKER);
-            dto3.setOperationType(OperationType.NOTHING);
+            dto3.setOperationType(OperationType.APPROVE);
             List<TransactionSignerDTO> signerDTOS = new ArrayList<>();
             signerDTOS.add(dto);
             signerDTOS.add(dto2);
@@ -146,27 +147,29 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
 
     @Override
     public void checkStatus(CorporateTransaction corporateTransaction) {
-        List<TransactionSignerDTO> signerList = transactionSignerService.findByCorporateTransaction(corporateTransaction);
+        Set<TransactionSignerDTO> signerList = transactionSignerService.findByCorporateTransaction(corporateTransaction);
         long rejectCount = signerList.stream().filter(signer -> signer.getOperationType().equals(OperationType.REJECT)).count();
+
         if (rejectCount > 0) {
             corporateTransaction.setStatus(TransactionStatus.REJECT);
             save(corporateTransactionMapper.toDto(corporateTransaction));
         } else {
-            long signCount = signerList.stream().filter(signer -> signer.getOperationType().equals(OperationType.APPROVE) && signer.getRoleType().equals(RoleType.MAKER)).count();
+            long signCount = signerList.stream().filter(signer -> signer.getOperationType().equals(OperationType.APPROVE) && signer.getRoleType().equals(RoleType.CHECKER)).count();
             if (signCount == signerList.size() - 1) {
                 corporateTransaction.setStatus(TransactionStatus.READY);
+                save(corporateTransactionMapper.toDto(corporateTransaction));
 
             }
         }
     }
 
     @Override
-    public List<CorporateTransactionDTO> findByCreatorIdAndFromAccountId(Long creatorId, Long fromAccountId) {
+    public Set<CorporateTransactionDTO> findByCreatorIdAndFromAccountId(Long creatorId, Long fromAccountId) {
         return corporateTransactionMapper.toDto(corporateTransactionRepository.findByCreatorIdAndFromAccountId(creatorId, fromAccountId));
     }
 
     @Override
-    public List<CorporateTransactionDTO> findByToAccountId(Long toAccountId) {
+    public Set<CorporateTransactionDTO> findByToAccountId(Long toAccountId) {
         return corporateTransactionMapper.toDto(corporateTransactionRepository.findByToAccountId(toAccountId));
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.*;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -15,8 +16,8 @@ import java.util.List;
 @Repository
 public interface CorporateTransactionRepository extends JpaRepository<CorporateTransaction, Long> {
 
-    List<CorporateTransaction> findByCreatorIdAndFromAccountId(Long creatorId, Long fromAccountId);
+    Set<CorporateTransaction> findByCreatorIdAndFromAccountId(Long creatorId, Long fromAccountId);
 
-    List<CorporateTransaction> findByToAccountId(Long toAccountId);
+    Set<CorporateTransaction> findByToAccountId(Long toAccountId);
 
 }

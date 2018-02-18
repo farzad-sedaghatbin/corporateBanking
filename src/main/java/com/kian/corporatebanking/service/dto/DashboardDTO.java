@@ -1,6 +1,7 @@
 package com.kian.corporatebanking.service.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardDTO implements Serializable {
@@ -10,14 +11,21 @@ public class DashboardDTO implements Serializable {
     private List<CorporateTransactionDTO> otherList;
 
     public List<CorporateTransactionDTO> getReadyList() {
+
+        if(readyList==null)
+            readyList=  new ArrayList<>();
         return readyList;
     }
 
     public void setReadyList(List<CorporateTransactionDTO> readyList) {
+
+
         this.readyList = readyList;
     }
 
     public List<CorporateTransactionDTO> getMineList() {
+        if(mineList==null)
+        mineList=    new ArrayList<>();
         return mineList;
     }
 
@@ -26,6 +34,8 @@ public class DashboardDTO implements Serializable {
     }
 
     public List<CorporateTransactionDTO> getOtherList() {
+        if(otherList==null)
+            otherList= new ArrayList<>();
         return otherList;
     }
 

@@ -44,7 +44,7 @@ public class TransactionSigner implements Serializable {
     @Column(name = "part_id")
     private Long partId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private CorporateTransaction corporateTransaction;
 
     @OneToMany(mappedBy = "transactionSigner")

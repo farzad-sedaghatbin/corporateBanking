@@ -1,11 +1,16 @@
 package com.kian.corporatebanking.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.kian.corporatebanking.domain.TransactionSigner;
+import com.kian.corporatebanking.domain.enumeration.OperationType;
 import com.kian.corporatebanking.domain.enumeration.TransactionStatus;
 import com.kian.corporatebanking.service.CorporateTransactionService;
 import com.kian.corporatebanking.service.TransactionSignerService;
 import com.kian.corporatebanking.service.TransactionTagService;
 import com.kian.corporatebanking.service.dto.DashboardDTO;
+import com.kian.corporatebanking.service.dto.DetailDTO;
+import com.kian.corporatebanking.service.dto.TransactionSignerDTO;
+import com.kian.corporatebanking.service.mapper.CorporateTransactionMapper;
 import com.kian.corporatebanking.web.rest.errors.BadRequestAlertException;
 import com.kian.corporatebanking.web.rest.util.HeaderUtil;
 import com.kian.corporatebanking.service.dto.CorporateTransactionDTO;
@@ -32,15 +37,19 @@ public class CorporateTransactionResource {
 
     private static final String ENTITY_NAME = "corporateTransaction";
 
+
     private final CorporateTransactionService corporateTransactionService;
+    private final CorporateTransactionMapper corporateTransactionMapper;
     private final TransactionSignerService transactionSignerService;
     private final TransactionTagService transactionTagService;
 
-    public CorporateTransactionResource(CorporateTransactionService corporateTransactionService, TransactionSignerService transactionSignerService, TransactionTagService transactionTagService) {
+    public CorporateTransactionResource(CorporateTransactionService corporateTransactionService, CorporateTransactionMapper corporateTransactionMapper, TransactionSignerService transactionSignerService, TransactionTagService transactionTagService) {
         this.corporateTransactionService = corporateTransactionService;
+        this.corporateTransactionMapper = corporateTransactionMapper;
         this.transactionSignerService = transactionSignerService;
         this.transactionTagService = transactionTagService;
     }
+//
 
     /**
      * POST  /corporate-transactions : Create a new corporateTransaction.
@@ -104,22 +113,25 @@ public class CorporateTransactionResource {
      */
     @GetMapping("/corporate-transactions/{id}")
     @Timed
-    public ResponseEntity<List<CorporateTransactionDTO>> getAllCorporateTransactions(@PathVariable Long id) {
+    public ResponseEntity<DashboardDTO> getAllCorporateTransactions(@PathVariable Long id) {
         log.debug("REST request to get a page of CorporateTransactions");
         //todo find party from token
-        List<CorporateTransactionDTO> corporateTransactionDTOS = corporateTransactionService.findByCreatorIdAndFromAccountId(1l, id);
+        Set<CorporateTransactionDTO> corporateTransactionDTOS = corporateTransactionService.findByCreatorIdAndFromAccountId(1l, id);
         if (corporateTransactionDTOS == null) {
-            corporateTransactionDTOS = new ArrayList<>();
+            corporateTransactionDTOS = new HashSet<>();
         }
         corporateTransactionDTOS.addAll(transactionSignerService.getAllCorporateTransactionByPartyId(1l));
         //todo change return type pageable
         DashboardDTO dashboardDTO = new DashboardDTO();
         dashboardDTO.setReadyList(corporateTransactionDTOS.stream().filter(dto -> dto.getStatus().equals(TransactionStatus.READY)).collect(Collectors.toList()));
         //todo change DTO and find mine an others
-        dashboardDTO.setMineList(corporateTransactionDTOS.stream().filter(dto -> !dto.getStatus().equals(TransactionStatus.CREATE)).collect(Collectors.toList()));
-        dashboardDTO.setOtherList(corporateTransactionDTOS.stream().filter(dto -> !dto.getStatus().equals(TransactionStatus.CREATE)).collect(Collectors.toList()));
+        Set<TransactionSignerDTO> transactionSigners = transactionSignerService.findByPartyId(1l);
+        List<Long> cid = transactionSigners.stream().filter(dto -> dto.getOperationType().equals(OperationType.NOTHING)).map(c -> c.getCorporateTransactionId()).collect(Collectors.toList());
+        if (cid != null)
+            cid.forEach(c -> dashboardDTO.getMineList().add(corporateTransactionService.findOne(c)));
+        dashboardDTO.setOtherList(new ArrayList<>());
 
-        return ResponseEntity.ok(corporateTransactionDTOS);
+        return ResponseEntity.ok(dashboardDTO);
     }
 
 
@@ -128,20 +140,21 @@ public class CorporateTransactionResource {
     public ResponseEntity<Set<CorporateTransactionDTO>> allCorporateTransactionsByTag(@PathVariable String label) {
         log.debug("REST request to get a page of CorporateTransactions");
         //todo find party from token
-        Set<CorporateTransactionDTO> corporateTransactionDTOS = transactionTagService.findByPartyIdAndLabel(1l, label).getTags();
+        Set<CorporateTransactionDTO> corporateTransactionDTOS = transactionTagService.findByPartyIdAndLabel(1l, label).getCorporateTransactionDTOS();
         if (corporateTransactionDTOS == null) {
             corporateTransactionDTOS = new HashSet<>();
         }
         return ResponseEntity.ok(corporateTransactionDTOS);
     }
-   @GetMapping("/corporate-transactions-by-party/{contactId}")
+
+    @GetMapping("/corporate-transactions-by-party/{contactId}")
     @Timed
-    public ResponseEntity<List<CorporateTransactionDTO>> allCorporateTransactionsByToParty(@PathVariable Long contactId) {
+    public ResponseEntity<Set<CorporateTransactionDTO>> allCorporateTransactionsByToParty(@PathVariable Long contactId) {
         log.debug("REST request to get a page of CorporateTransactions");
         //todo find party from token find contact from contact
-        List<CorporateTransactionDTO> corporateTransactionDTOS = corporateTransactionService.findByToAccountId(contactId);
+        Set<CorporateTransactionDTO> corporateTransactionDTOS = corporateTransactionService.findByToAccountId(contactId);
         if (corporateTransactionDTOS == null) {
-            corporateTransactionDTOS = new ArrayList<>();
+            corporateTransactionDTOS = new HashSet<>();
         }
         return ResponseEntity.ok(corporateTransactionDTOS);
     }
@@ -154,11 +167,17 @@ public class CorporateTransactionResource {
      */
     @GetMapping("/detail-corporate-transactions/{id}")
     @Timed
-    public ResponseEntity<CorporateTransactionDTO> getCorporateTransaction(@PathVariable Long id) {
+    public ResponseEntity<DetailDTO> getCorporateTransaction(@PathVariable Long id) {
         log.debug("REST request to get CorporateTransaction : {}", id);
         CorporateTransactionDTO corporateTransactionDTO = corporateTransactionService.findOne(id);
+        Set<TransactionSignerDTO> transactionSigners = transactionSignerService.findByCorporateTransaction(corporateTransactionMapper.toEntity(corporateTransactionDTO));
         //todo fetch eager for toAccount from contact
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(corporateTransactionDTO));
+        DetailDTO detailDTO = new DetailDTO();
+        detailDTO.setCorporateTransactionDTO(corporateTransactionDTO);
+        detailDTO.setSignerList(transactionSigners);
+
+
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(detailDTO));
     }
 
     /**

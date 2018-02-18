@@ -108,6 +108,7 @@ public class TransactionTagResourceIntTest {
 
         // Create the TransactionTag
         TransactionTagDTO transactionTagDTO = transactionTagMapper.toDto(transactionTag);
+        transactionTagDTO.setCorporateTransactionId(2402l);
         restTransactionTagMockMvc.perform(post("/api/transaction-tags")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(transactionTagDTO)))

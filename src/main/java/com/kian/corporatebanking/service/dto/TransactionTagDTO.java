@@ -16,8 +16,25 @@ public class TransactionTagDTO implements Serializable {
     private String label;
 
     private Long partyId;
+    private Long CorporateTransactionId;
 
-    private Set<CorporateTransactionDTO> tags = new HashSet<>();
+    private Set<CorporateTransactionDTO> corporateTransactionDTOS = new HashSet<>();
+
+    public Long getCorporateTransactionId() {
+        return CorporateTransactionId;
+    }
+
+    public void setCorporateTransactionId(Long corporateTransactionId) {
+        CorporateTransactionId = corporateTransactionId;
+    }
+
+    public Set<CorporateTransactionDTO> getCorporateTransactionDTOS() {
+        return corporateTransactionDTOS;
+    }
+
+    public void setCorporateTransactionDTOS(Set<CorporateTransactionDTO> corporateTransactionDTOS) {
+        this.corporateTransactionDTOS = corporateTransactionDTOS;
+    }
 
     public Long getId() {
         return id;
@@ -43,13 +60,6 @@ public class TransactionTagDTO implements Serializable {
         this.partyId = partyId;
     }
 
-    public Set<CorporateTransactionDTO> getTags() {
-        return tags;
-    }
-
-    public void setTags(Set<CorporateTransactionDTO> corporateTransactions) {
-        this.tags = corporateTransactions;
-    }
 
     @Override
     public boolean equals(Object o) {

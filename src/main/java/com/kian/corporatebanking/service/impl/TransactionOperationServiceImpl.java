@@ -7,6 +7,7 @@ import com.kian.corporatebanking.domain.TransactionOperation;
 import com.kian.corporatebanking.repository.TransactionOperationRepository;
 import com.kian.corporatebanking.service.TransactionSignerService;
 import com.kian.corporatebanking.service.dto.TransactionOperationDTO;
+import com.kian.corporatebanking.service.mapper.CorporateTransactionMapper;
 import com.kian.corporatebanking.service.mapper.TransactionOperationMapper;
 import com.kian.corporatebanking.service.mapper.TransactionSignerMapper;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ public class TransactionOperationServiceImpl implements TransactionOperationServ
     private final TransactionOperationRepository transactionOperationRepository;
 
     private final TransactionOperationMapper transactionOperationMapper;
+    private final CorporateTransactionMapper corporateTransactionMapper;
 
     private final TransactionSignerMapper transactionSignerMapper;
 
@@ -36,9 +38,10 @@ public class TransactionOperationServiceImpl implements TransactionOperationServ
 
     private final CorporateTransactionService corporateTransactionService;
 
-    public TransactionOperationServiceImpl(TransactionOperationRepository transactionOperationRepository, TransactionOperationMapper transactionOperationMapper, TransactionSignerMapper transactionSignerMapper, TransactionSignerService transactionSignerService, CorporateTransactionService corporateTransactionService) {
+    public TransactionOperationServiceImpl(TransactionOperationRepository transactionOperationRepository, TransactionOperationMapper transactionOperationMapper, CorporateTransactionMapper corporateTransactionMapper, TransactionSignerMapper transactionSignerMapper, TransactionSignerService transactionSignerService, CorporateTransactionService corporateTransactionService) {
         this.transactionOperationRepository = transactionOperationRepository;
         this.transactionOperationMapper = transactionOperationMapper;
+        this.corporateTransactionMapper = corporateTransactionMapper;
         this.transactionSignerMapper = transactionSignerMapper;
         this.transactionSignerService = transactionSignerService;
         this.corporateTransactionService = corporateTransactionService;
@@ -55,10 +58,11 @@ public class TransactionOperationServiceImpl implements TransactionOperationServ
         log.debug("Request to save TransactionOperation : {}", transactionOperationDTO);
         TransactionOperation transactionOperation = transactionOperationMapper.toEntity(transactionOperationDTO);
         transactionOperation = transactionOperationRepository.save(transactionOperation);
-        TransactionSigner transactionSigner = transactionOperation.getTransactionSigner();
+        //soal
+        TransactionSigner transactionSigner = transactionSignerMapper.toEntity(transactionSignerService.findOne(transactionOperationDTO.getTransactionSignerId()));
         transactionSigner.setOperationType(transactionOperation.getOperationType());
         transactionSignerService.save(transactionSignerMapper.toDto(transactionSigner));
-        corporateTransactionService.checkStatus(transactionSigner.getCorporateTransaction());
+        corporateTransactionService.checkStatus(corporateTransactionMapper.toEntity(corporateTransactionService.findOne(transactionSigner.getCorporateTransaction().getId())));
         return transactionOperationMapper.toDto(transactionOperation);
     }
 

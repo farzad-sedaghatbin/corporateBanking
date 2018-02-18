@@ -15,9 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -96,17 +94,17 @@ public class TransactionSignerServiceImpl implements TransactionSignerService {
     }
 
     @Override
-    public List<TransactionSignerDTO> findByCorporateTransaction(CorporateTransaction corporateTransaction) {
-        return transactionSignerRepository.findByCorporateTransaction(corporateTransaction).stream().map(transactionSignerMapper::toDto).collect(Collectors.toList());
+    public Set<TransactionSignerDTO> findByCorporateTransaction(CorporateTransaction corporateTransaction) {
+        return new HashSet<>(transactionSignerRepository.findByCorporateTransaction(corporateTransaction).stream().map(transactionSignerMapper::toDto).collect(Collectors.toList()));
     }
 
     @Override
-    public List<TransactionSignerDTO> findByPartyId(Long partyId) {
-        return transactionSignerRepository.findByPartId(partyId).stream().map(transactionSignerMapper::toDto).collect(Collectors.toList());
+    public Set<TransactionSignerDTO> findByPartyId(Long partyId) {
+        return new HashSet<>(transactionSignerRepository.findByPartId(partyId).stream().map(transactionSignerMapper::toDto).collect(Collectors.toList()));
     }
 
     @Override
-    public List<CorporateTransactionDTO> getAllCorporateTransactionByPartyId(Long partyId) {
-        return Optional.ofNullable(transactionSignerRepository.findByPartId(partyId).stream().map(TransactionSigner::getCorporateTransaction).collect(Collectors.toList()).stream().map(corporateTransactionMapper::toDto).collect(Collectors.toList())).orElse(new ArrayList<>());
+    public Set<CorporateTransactionDTO> getAllCorporateTransactionByPartyId(Long partyId) {
+        return Optional.ofNullable(new HashSet<>(transactionSignerRepository.findByPartId(partyId).stream().map(TransactionSigner::getCorporateTransaction).collect(Collectors.toList()).stream().map(corporateTransactionMapper::toDto).collect(Collectors.toList()))).orElse(new HashSet<>());
     }
 }

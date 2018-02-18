@@ -36,7 +36,7 @@ public class TransactionTag implements Serializable {
     @JoinTable(name = "corporate_transaction_tags",
                joinColumns = @JoinColumn(name="corporate_transactions_id", referencedColumnName="id"),
                inverseJoinColumns = @JoinColumn(name="tags_id", referencedColumnName="id"))
-    private Set<CorporateTransaction> tags = new HashSet<>();
+    private Set<CorporateTransaction> corporateTransactions = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -73,27 +73,13 @@ public class TransactionTag implements Serializable {
         this.partyId = partyId;
     }
 
-    public Set<CorporateTransaction> getTags() {
-        return tags;
+    public Set<CorporateTransaction> getCorporateTransactions() {
+        return corporateTransactions;
     }
 
-    public TransactionTag tags(Set<CorporateTransaction> corporateTransactions) {
-        this.tags = corporateTransactions;
-        return this;
-    }
 
-    public TransactionTag addTags(CorporateTransaction corporateTransaction) {
-        this.tags.add(corporateTransaction);
-        return this;
-    }
-
-    public TransactionTag removeTags(CorporateTransaction corporateTransaction) {
-        this.tags.remove(corporateTransaction);
-        return this;
-    }
-
-    public void setTags(Set<CorporateTransaction> corporateTransactions) {
-        this.tags = corporateTransactions;
+    public void setCorporateTransactions(Set<CorporateTransaction> corporateTransactions) {
+        this.corporateTransactions = corporateTransactions;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
