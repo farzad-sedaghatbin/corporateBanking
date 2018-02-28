@@ -17,6 +17,8 @@ import java.util.Set;
 public interface TransactionDescriptionRepository extends JpaRepository<TransactionDescription, Long> {
 
 
+    TransactionDescription findByLabel(String label);
+
 
 
 }

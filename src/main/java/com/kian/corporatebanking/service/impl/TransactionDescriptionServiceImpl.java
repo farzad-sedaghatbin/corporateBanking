@@ -83,4 +83,9 @@ public class TransactionDescriptionServiceImpl implements TransactionDescription
         log.debug("Request to delete TransactionDescription : {}", id);
         transactionDescriptionRepository.delete(id);
     }
+
+    @Override
+    public TransactionDescription findByLabel(String label) {
+        return transactionDescriptionRepository.findByLabel(label);
+    }
 }

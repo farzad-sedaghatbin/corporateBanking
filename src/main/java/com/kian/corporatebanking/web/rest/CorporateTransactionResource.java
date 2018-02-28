@@ -121,17 +121,14 @@ public class CorporateTransactionResource {
         if (corporateTransactionDTOS == null) {
             corporateTransactionDTOS = new HashSet<>();
         }
-        corporateTransactionDTOS.addAll(transactionSignerService.getAllCorporateTransactionByPartyId(1l));
+        corporateTransactionDTOS.addAll(transactionSignerService.getAllCorporateTransactionByPartyId(id));
         //todo change return type pageable
         DashboardDTO dashboardDTO = new DashboardDTO();
         dashboardDTO.setReadyList(corporateTransactionDTOS.stream().filter(dto -> dto.getStatus().equals(TransactionStatus.READY)).collect(Collectors.toList()));
         //todo change DTO and find mine an others
-        Set<TransactionSignerDTO> transactionSigners = transactionSignerService.findByPartyId(1l);
-        List<Long> cid = transactionSigners.stream().filter(dto -> dto.getOperationType().equals(OperationType.NOTHING)).map(c -> c.getCorporateTransactionId()).collect(Collectors.toList());
-        if (cid != null)
-            cid.forEach(c -> dashboardDTO.getMineList().add(corporateTransactionService.findOne(c)));
-        dashboardDTO.setOtherList(new ArrayList<>());
-
+        Set<TransactionSigner> transactionSigners = transactionSignerService.findByPartyId(id);
+        dashboardDTO.getMineList().addAll(transactionSigners.stream().filter(dto -> dto.getOperationType().equals(OperationType.NOTHING) && dto.getCorporateTransaction().getStatus().equals(TransactionStatus.CREATE)).map(c -> corporateTransactionMapper.toDto(c.getCorporateTransaction())).collect(Collectors.toList()));
+        dashboardDTO.getOtherList().addAll(transactionSigners.stream().filter(dto -> dto.getOperationType().equals(OperationType.APPROVE)  && dto.getCorporateTransaction().getStatus().equals(TransactionStatus.CREATE) ).map(c -> corporateTransactionMapper.toDto(c.getCorporateTransaction())).collect(Collectors.toList()));
         return ResponseEntity.ok(dashboardDTO);
     }
 

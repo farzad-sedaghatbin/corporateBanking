@@ -48,7 +48,7 @@ public interface TransactionSignerService {
 
     Set<TransactionSignerDTO> findByCorporateTransaction(CorporateTransaction corporateTransaction);
 
-    Set<TransactionSignerDTO> findByPartyId(Long partyId);
+    Set<TransactionSigner> findByPartyId(Long partyId);
 
     Set<CorporateTransactionDTO> getAllCorporateTransactionByPartyId(Long partyId);
 

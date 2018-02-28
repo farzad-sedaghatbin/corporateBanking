@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.*;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
 public interface TransactionSignerRepository extends JpaRepository<TransactionSigner, Long> {
 
     public List<TransactionSigner> findByCorporateTransaction(CorporateTransaction corporateTransaction);
-    public List<TransactionSigner> findByPartId(Long id);
+    public Set<TransactionSigner> findByPartId(Long id);
 
 
 }

@@ -1,5 +1,6 @@
 package com.kian.corporatebanking.service;
 
+import com.kian.corporatebanking.domain.TransactionDescription;
 import com.kian.corporatebanking.service.dto.TransactionDescriptionDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,4 +40,7 @@ public interface TransactionDescriptionService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    TransactionDescription findByLabel(String label);
+
 }

@@ -1,7 +1,7 @@
 package com.kian.corporatebanking.service.impl;
 
 import com.kian.corporatebanking.domain.TransactionContents;
-import com.kian.corporatebanking.domain.TransactionSigner;
+import com.kian.corporatebanking.domain.TransactionDescription;
 import com.kian.corporatebanking.domain.enumeration.OperationType;
 import com.kian.corporatebanking.domain.enumeration.RoleType;
 import com.kian.corporatebanking.domain.enumeration.TransactionStatus;
@@ -9,6 +9,7 @@ import com.kian.corporatebanking.service.CorporateTransactionService;
 import com.kian.corporatebanking.domain.CorporateTransaction;
 import com.kian.corporatebanking.repository.CorporateTransactionRepository;
 import com.kian.corporatebanking.service.TransactionContentsService;
+import com.kian.corporatebanking.service.TransactionDescriptionService;
 import com.kian.corporatebanking.service.TransactionSignerService;
 import com.kian.corporatebanking.service.dto.CorporateTransactionDTO;
 import com.kian.corporatebanking.service.dto.TransactionContentsDTO;
@@ -41,15 +42,17 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
     private final CorporateTransactionRepository corporateTransactionRepository;
 
     private final CorporateTransactionMapper corporateTransactionMapper;
+    private final TransactionDescriptionService transactionDescriptionService;
     private final TransactionContentsMapper transactionContentsMapper;
     private final TransactionSignerMapper transactionSignerMapper;
     private final TransactionContentsService transactionContentsService;
     private final TransactionSignerService transactionSignerService;
 
 
-    public CorporateTransactionServiceImpl(CorporateTransactionRepository corporateTransactionRepository, CorporateTransactionMapper corporateTransactionMapper, TransactionContentsMapper transactionContentsMapper, TransactionSignerMapper transactionSignerMapper, TransactionContentsService transactionContentsService, TransactionSignerService transactionSignerService) {
+    public CorporateTransactionServiceImpl(CorporateTransactionRepository corporateTransactionRepository, CorporateTransactionMapper corporateTransactionMapper, TransactionDescriptionService transactionDescriptionService, TransactionContentsMapper transactionContentsMapper, TransactionSignerMapper transactionSignerMapper, TransactionContentsService transactionContentsService, TransactionSignerService transactionSignerService) {
         this.corporateTransactionRepository = corporateTransactionRepository;
         this.corporateTransactionMapper = corporateTransactionMapper;
+        this.transactionDescriptionService = transactionDescriptionService;
         this.transactionContentsMapper = transactionContentsMapper;
         this.transactionSignerMapper = transactionSignerMapper;
         this.transactionContentsService = transactionContentsService;
@@ -67,6 +70,8 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
         log.debug("Request to save CorporateTransaction : {}", corporateTransactionDTO);
         corporateTransactionDTO.setStatus(TransactionStatus.CREATE);
         CorporateTransaction corporateTransaction = corporateTransactionMapper.toEntity(corporateTransactionDTO);
+        TransactionDescription transactionDescription = transactionDescriptionService.findByLabel(corporateTransactionDTO.getDescription());
+        corporateTransaction.setDescriptions(transactionDescription);
         corporateTransaction = corporateTransactionRepository.save(corporateTransaction);
         if (corporateTransactionDTO.getContent() != null) {
             TransactionContentsDTO transactionContentsDTO = new TransactionContentsDTO();
@@ -78,7 +83,7 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
         }
 
         //todo : fetch relative signers
-        if(!corporateTransactionDTO.isDraft()) {
+        if (!corporateTransactionDTO.isDraft()) {
 
             TransactionSignerDTO dto = new TransactionSignerDTO();
             dto.setPartId(1l);
@@ -183,6 +188,6 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
 
     @Override
     public Set<CorporateTransaction> findByFromAccountIdAndDescriptions_Label(Long id, String label) {
-        return corporateTransactionRepository.findByFromAccountIdAndDescriptions_Label(id,label);
+        return corporateTransactionRepository.findByFromAccountIdAndDescriptions_Label(id, label);
     }
 }

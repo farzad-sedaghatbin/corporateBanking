@@ -103,13 +103,6 @@ public class TransactionSignerResource {
      * @param id the id of the transactionSignerDTO to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the transactionSignerDTO, or with status 404 (Not Found)
      */
-    @GetMapping("/transaction-signers/{id}")
-    @Timed
-    public ResponseEntity<TransactionSignerDTO> getTransactionSigner(@PathVariable Long id) {
-        log.debug("REST request to get TransactionSigner : {}", id);
-        TransactionSignerDTO transactionSignerDTO = transactionSignerService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(transactionSignerDTO));
-    }
 
     /**
      * DELETE  /transaction-signers/:id : delete the "id" transactionSigner.

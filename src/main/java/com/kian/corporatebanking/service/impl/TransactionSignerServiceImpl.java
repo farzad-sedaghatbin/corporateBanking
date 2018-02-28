@@ -99,8 +99,8 @@ public class TransactionSignerServiceImpl implements TransactionSignerService {
     }
 
     @Override
-    public Set<TransactionSignerDTO> findByPartyId(Long partyId) {
-        return new HashSet<>(transactionSignerRepository.findByPartId(partyId).stream().map(transactionSignerMapper::toDto).collect(Collectors.toList()));
+    public Set<TransactionSigner> findByPartyId(Long partyId) {
+        return transactionSignerRepository.findByPartId(partyId);
     }
 
     @Override
