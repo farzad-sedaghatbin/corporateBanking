@@ -42,17 +42,7 @@ public class TransactionTagResource {
     }
 
 
-    public static void main(String[] args) {
-        TransactionTagDTO transactionTagDTO = new TransactionTagDTO();
-        transactionTagDTO.setLabel("food");
-        transactionTagDTO.setPartyId(2l);
-        transactionTagDTO.setCorporateTransactionId(2402l);
-        try {
-            System.out.println(new ObjectMapper().writeValueAsString(transactionTagDTO));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-    }
+
     /**
      * POST  /transaction-tags : Create a new transactionTag.
      *

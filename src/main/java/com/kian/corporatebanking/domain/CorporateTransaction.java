@@ -64,20 +64,30 @@ public class CorporateTransaction implements Serializable {
     @Column(name = "creator_id")
     private Long creatorId;
 
+    @Column(name = "attachment_path")
+    private String attachmentPath;
+
     @OneToMany(mappedBy = "corporateTransaction")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TransactionContents> contents = new HashSet<>();
 
-    @OneToMany(mappedBy = "corporateTransaction")
-    @JsonIgnore
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<TransactionDescription> descriptions = new HashSet<>();
+    @ManyToOne()
+    private TransactionDescription descriptions;
 
     @OneToMany(mappedBy = "corporateTransaction")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<TransactionSigner> signers = new HashSet<>();
+
+
+    public String getAttachmentPath() {
+        return attachmentPath;
+    }
+
+    public void setAttachmentPath(String attachmentPath) {
+        this.attachmentPath = attachmentPath;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -243,29 +253,13 @@ public class CorporateTransaction implements Serializable {
         this.contents = transactionContents;
     }
 
-    public Set<TransactionDescription> getDescriptions() {
+
+    public TransactionDescription getDescriptions() {
         return descriptions;
     }
 
-    public CorporateTransaction descriptions(Set<TransactionDescription> transactionDescriptions) {
-        this.descriptions = transactionDescriptions;
-        return this;
-    }
-
-    public CorporateTransaction addDescriptions(TransactionDescription transactionDescription) {
-        this.descriptions.add(transactionDescription);
-        transactionDescription.setCorporateTransaction(this);
-        return this;
-    }
-
-    public CorporateTransaction removeDescriptions(TransactionDescription transactionDescription) {
-        this.descriptions.remove(transactionDescription);
-        transactionDescription.setCorporateTransaction(null);
-        return this;
-    }
-
-    public void setDescriptions(Set<TransactionDescription> transactionDescriptions) {
-        this.descriptions = transactionDescriptions;
+    public void setDescriptions(TransactionDescription descriptions) {
+        this.descriptions = descriptions;
     }
 
     public Set<TransactionSigner> getSigners() {

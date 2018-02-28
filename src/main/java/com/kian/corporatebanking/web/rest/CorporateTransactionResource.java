@@ -1,6 +1,7 @@
 package com.kian.corporatebanking.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.kian.corporatebanking.domain.CorporateTransaction;
 import com.kian.corporatebanking.domain.TransactionSigner;
 import com.kian.corporatebanking.domain.enumeration.OperationType;
 import com.kian.corporatebanking.domain.enumeration.TransactionStatus;
@@ -97,8 +98,8 @@ public class CorporateTransactionResource {
     public ResponseEntity<CorporateTransactionDTO> updateCorporateTransaction(@RequestBody CorporateTransactionDTO corporateTransactionDTO) throws URISyntaxException {
         log.debug("REST request to update CorporateTransaction : {}", corporateTransactionDTO);
         if (corporateTransactionDTO.getId() == null) {
-            return createCorporateTransaction(corporateTransactionDTO);
-        }
+                throw new BadRequestAlertException("ID is empty", "CorporateTransaction", "ID is empty");
+            }
         CorporateTransactionDTO result = corporateTransactionService.save(corporateTransactionDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, corporateTransactionDTO.getId().toString()))
@@ -157,6 +158,16 @@ public class CorporateTransactionResource {
             corporateTransactionDTOS = new HashSet<>();
         }
         return ResponseEntity.ok(corporateTransactionDTOS);
+    }
+
+
+  @GetMapping("/corporate-transactions-by-description/{id}/{label}")
+    @Timed
+    public ResponseEntity<Set<CorporateTransactionDTO>> allCorporateTransactionsByDescription(@PathVariable Long id,@PathVariable String label) {
+        log.debug("REST request to get a page of CorporateTransactions");
+        //todo find party from token find contact from contact
+        Set<CorporateTransaction> corporateTransactions = corporateTransactionService.findByFromAccountIdAndDescriptions_Label(id,label);
+        return ResponseEntity.ok(corporateTransactionMapper.toDto(corporateTransactions));
     }
 
     /**

@@ -609,6 +609,7 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>${dockerfile-maven-plugin.version}</version>
+
                 <!--
                 Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
                 <executions>

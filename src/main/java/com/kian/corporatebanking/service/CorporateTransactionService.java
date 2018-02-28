@@ -21,6 +21,9 @@ public interface CorporateTransactionService {
      */
     CorporateTransactionDTO save(CorporateTransactionDTO corporateTransactionDTO);
 
+
+    CorporateTransactionDTO update (CorporateTransactionDTO corporateTransactionDTO);
+
     /**
      * Get all the corporateTransactions.
      *
@@ -49,5 +52,8 @@ public interface CorporateTransactionService {
     Set<CorporateTransactionDTO> findByCreatorIdAndFromAccountId(Long creatorId, Long transactionId);
 
     Set<CorporateTransactionDTO> findByToAccountId(Long toAccountId);
+
+    Set<CorporateTransaction> findByFromAccountIdAndDescriptions_Label(Long id,String label);
+
 
 }

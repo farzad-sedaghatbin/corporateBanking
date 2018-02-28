@@ -25,7 +25,7 @@ label String,
 partyId Long
 }
 entity TransactionDescription{
-lable String,
+label String,
 partyId Long
 }
 entity TransactionSigner{

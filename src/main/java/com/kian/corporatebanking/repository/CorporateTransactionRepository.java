@@ -20,4 +20,8 @@ public interface CorporateTransactionRepository extends JpaRepository<CorporateT
 
     Set<CorporateTransaction> findByToAccountId(Long toAccountId);
 
+
+    Set<CorporateTransaction> findByFromAccountIdAndDescriptions_Label(Long id,String label);
+
+
 }

@@ -37,7 +37,7 @@ public interface TransactionSignerService {
      * @param id the id of the entity
      * @return the entity
      */
-    TransactionSignerDTO findOne(Long id);
+    TransactionSigner findOne(Long id);
 
     /**
      * Delete the "id" transactionSigner.

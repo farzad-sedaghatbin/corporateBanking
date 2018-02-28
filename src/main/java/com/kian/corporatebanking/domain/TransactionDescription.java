@@ -6,7 +6,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A TransactionDescription.
@@ -23,14 +25,11 @@ public class TransactionDescription implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "lable")
-    private String lable;
+    @Column(name = "label")
+    private String label;
 
-    @Column(name = "party_id")
-    private Long partyId;
-
-    @ManyToOne
-    private CorporateTransaction corporateTransaction;
+    @OneToMany
+    private Set<CorporateTransaction> corporateTransactions= new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -41,45 +40,28 @@ public class TransactionDescription implements Serializable {
         this.id = id;
     }
 
-    public String getLable() {
-        return lable;
+    public String getLabel() {
+        return label;
     }
 
     public TransactionDescription lable(String lable) {
-        this.lable = lable;
+        this.label = lable;
         return this;
     }
 
-    public void setLable(String lable) {
-        this.lable = lable;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
-    public Long getPartyId() {
-        return partyId;
+    public Set<CorporateTransaction> getCorporateTransactions() {
+        return corporateTransactions;
     }
 
-    public TransactionDescription partyId(Long partyId) {
-        this.partyId = partyId;
-        return this;
+    public void setCorporateTransactions(Set<CorporateTransaction> corporateTransactions) {
+        this.corporateTransactions = corporateTransactions;
     }
 
-    public void setPartyId(Long partyId) {
-        this.partyId = partyId;
-    }
-
-    public CorporateTransaction getCorporateTransaction() {
-        return corporateTransaction;
-    }
-
-    public TransactionDescription corporateTransaction(CorporateTransaction corporateTransaction) {
-        this.corporateTransaction = corporateTransaction;
-        return this;
-    }
-
-    public void setCorporateTransaction(CorporateTransaction corporateTransaction) {
-        this.corporateTransaction = corporateTransaction;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+// jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
     public boolean equals(Object o) {
@@ -105,8 +87,7 @@ public class TransactionDescription implements Serializable {
     public String toString() {
         return "TransactionDescription{" +
             "id=" + getId() +
-            ", lable='" + getLable() + "'" +
-            ", partyId=" + getPartyId() +
+            ", label='" + getLabel() + "'" +
             "}";
     }
 }

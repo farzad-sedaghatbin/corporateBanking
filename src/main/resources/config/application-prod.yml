@@ -33,7 +33,7 @@ spring:
             port: 8500
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/corporateBanking
+        url: jdbc:postgresql://localhost:5432/corporatebank
         username: postgres
         password: arsham
     jpa:

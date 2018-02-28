@@ -17,17 +17,6 @@ import com.kian.corporatebanking.domain.enumeration.OperationType;
 public class TransactionOperationDTO implements Serializable {
 
 
-    public static void main(String[] args) {
-        TransactionOperationDTO transactionOperationDTO= new TransactionOperationDTO();
-        transactionOperationDTO.setOperationType(OperationType.APPROVE);
-        transactionOperationDTO.setComment("hello");
-        transactionOperationDTO.setTransactionSignerId(1l);
-        try {
-            System.out.println(new ObjectMapper().writeValueAsString(transactionOperationDTO));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-    }
     private Long id;
 
     private ZonedDateTime operationDate;

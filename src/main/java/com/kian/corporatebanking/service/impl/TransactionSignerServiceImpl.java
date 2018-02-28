@@ -76,10 +76,10 @@ public class TransactionSignerServiceImpl implements TransactionSignerService {
      */
     @Override
     @Transactional(readOnly = true)
-    public TransactionSignerDTO findOne(Long id) {
+    public TransactionSigner findOne(Long id) {
         log.debug("Request to get TransactionSigner : {}", id);
         TransactionSigner transactionSigner = transactionSignerRepository.findOne(id);
-        return transactionSignerMapper.toDto(transactionSigner);
+        return transactionSigner;
     }
 
     /**

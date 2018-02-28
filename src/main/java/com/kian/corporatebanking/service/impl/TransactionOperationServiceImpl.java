@@ -59,10 +59,10 @@ public class TransactionOperationServiceImpl implements TransactionOperationServ
         TransactionOperation transactionOperation = transactionOperationMapper.toEntity(transactionOperationDTO);
         transactionOperation = transactionOperationRepository.save(transactionOperation);
         //soal
-        TransactionSigner transactionSigner = transactionSignerMapper.toEntity(transactionSignerService.findOne(transactionOperationDTO.getTransactionSignerId()));
+        TransactionSigner transactionSigner = transactionSignerService.findOne(transactionOperationDTO.getTransactionSignerId());
         transactionSigner.setOperationType(transactionOperation.getOperationType());
         transactionSignerService.save(transactionSignerMapper.toDto(transactionSigner));
-        corporateTransactionService.checkStatus(corporateTransactionMapper.toEntity(corporateTransactionService.findOne(transactionSigner.getCorporateTransaction().getId())));
+        corporateTransactionService.checkStatus(transactionSigner.getCorporateTransaction());
         return transactionOperationMapper.toDto(transactionOperation);
     }
 
