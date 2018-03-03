@@ -92,7 +92,7 @@ public class TransactionDescriptionResourceIntTest {
     public static TransactionDescription createEntity(EntityManager em) {
         TransactionDescription transactionDescription = new TransactionDescription()
             .lable(DEFAULT_LABLE)
-            .partyId(DEFAULT_PARTY_ID);
+         /*   .partyId(DEFAULT_PARTY_ID)*/;
         return transactionDescription;
     }
 
@@ -117,8 +117,8 @@ public class TransactionDescriptionResourceIntTest {
         List<TransactionDescription> transactionDescriptionList = transactionDescriptionRepository.findAll();
         assertThat(transactionDescriptionList).hasSize(databaseSizeBeforeCreate + 1);
         TransactionDescription testTransactionDescription = transactionDescriptionList.get(transactionDescriptionList.size() - 1);
-        assertThat(testTransactionDescription.getLable()).isEqualTo(DEFAULT_LABLE);
-        assertThat(testTransactionDescription.getPartyId()).isEqualTo(DEFAULT_PARTY_ID);
+        assertThat(testTransactionDescription.getLabel()).isEqualTo(DEFAULT_LABLE);
+//        assertThat(testTransactionDescription.getPartyId()).isEqualTo(DEFAULT_PARTY_ID);
     }
 
     @Test
@@ -191,8 +191,8 @@ public class TransactionDescriptionResourceIntTest {
         // Disconnect from session so that the updates on updatedTransactionDescription are not directly saved in db
         em.detach(updatedTransactionDescription);
         updatedTransactionDescription
-            .lable(UPDATED_LABLE)
-            .partyId(UPDATED_PARTY_ID);
+            .lable(UPDATED_LABLE)/*
+            .partyId(UPDATED_PARTY_ID)*/;
         TransactionDescriptionDTO transactionDescriptionDTO = transactionDescriptionMapper.toDto(updatedTransactionDescription);
 
         restTransactionDescriptionMockMvc.perform(put("/api/transaction-descriptions")
@@ -204,8 +204,8 @@ public class TransactionDescriptionResourceIntTest {
         List<TransactionDescription> transactionDescriptionList = transactionDescriptionRepository.findAll();
         assertThat(transactionDescriptionList).hasSize(databaseSizeBeforeUpdate);
         TransactionDescription testTransactionDescription = transactionDescriptionList.get(transactionDescriptionList.size() - 1);
-        assertThat(testTransactionDescription.getLable()).isEqualTo(UPDATED_LABLE);
-        assertThat(testTransactionDescription.getPartyId()).isEqualTo(UPDATED_PARTY_ID);
+        assertThat(testTransactionDescription.getLabel()).isEqualTo(UPDATED_LABLE);
+//        assertThat(testTransactionDescription.getPartyId()).isEqualTo(UPDATED_PARTY_ID);
     }
 
     @Test

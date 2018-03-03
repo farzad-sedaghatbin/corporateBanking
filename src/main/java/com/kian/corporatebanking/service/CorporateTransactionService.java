@@ -55,5 +55,7 @@ public interface CorporateTransactionService {
 
     Set<CorporateTransaction> findByFromAccountIdAndDescriptions_Label(Long id,String label);
 
+    Set<CorporateTransaction> findByFromAccountIdAndDraft(Long id);
+
 
 }

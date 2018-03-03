@@ -114,7 +114,18 @@ public class CorporateTransactionResource {
      */
     @GetMapping("/corporate-transactions/{id}")
     @Timed
-    public ResponseEntity<DashboardDTO> getAllCorporateTransactions(@PathVariable Long id) {
+    public ResponseEntity<Set<CorporateTransactionDTO>> getAllCorporateTransactions(@PathVariable Long id) {
+        log.debug("REST request to get a page of CorporateTransactions");
+        //todo find party from token
+        Set<CorporateTransactionDTO> corporateTransactionDTOS = corporateTransactionService.findByCreatorIdAndFromAccountId(1l, id);
+        if (corporateTransactionDTOS == null) {
+            corporateTransactionDTOS = new HashSet<>();
+        }
+        return ResponseEntity.ok(corporateTransactionDTOS);
+    }
+   @GetMapping("/dashboard/{id}")
+    @Timed
+    public ResponseEntity<DashboardDTO> dashboard(@PathVariable Long id) {
         log.debug("REST request to get a page of CorporateTransactions");
         //todo find party from token
         Set<CorporateTransactionDTO> corporateTransactionDTOS = corporateTransactionService.findByCreatorIdAndFromAccountId(1l, id);
@@ -131,6 +142,7 @@ public class CorporateTransactionResource {
         dashboardDTO.getOtherList().addAll(transactionSigners.stream().filter(dto -> dto.getOperationType().equals(OperationType.APPROVE)  && dto.getCorporateTransaction().getStatus().equals(TransactionStatus.CREATE) ).map(c -> corporateTransactionMapper.toDto(c.getCorporateTransaction())).collect(Collectors.toList()));
         return ResponseEntity.ok(dashboardDTO);
     }
+
 
 
     @GetMapping("/corporate-transactions-by-tags/{label}")
@@ -164,6 +176,16 @@ public class CorporateTransactionResource {
         log.debug("REST request to get a page of CorporateTransactions");
         //todo find party from token find contact from contact
         Set<CorporateTransaction> corporateTransactions = corporateTransactionService.findByFromAccountIdAndDescriptions_Label(id,label);
+        return ResponseEntity.ok(corporateTransactionMapper.toDto(corporateTransactions));
+    }
+
+
+    @GetMapping("/draft-corporate-transactions/{id}")
+    @Timed
+    public ResponseEntity<Set<CorporateTransactionDTO>> allDraftCorporateTransactions(@PathVariable Long id) {
+        log.debug("REST request to get a page of CorporateTransactions");
+        //todo find party from token find contact from contact
+        Set<CorporateTransaction> corporateTransactions = corporateTransactionService.findByFromAccountIdAndDraft(id);
         return ResponseEntity.ok(corporateTransactionMapper.toDto(corporateTransactions));
     }
 

@@ -190,4 +190,9 @@ public class CorporateTransactionServiceImpl implements CorporateTransactionServ
     public Set<CorporateTransaction> findByFromAccountIdAndDescriptions_Label(Long id, String label) {
         return corporateTransactionRepository.findByFromAccountIdAndDescriptions_Label(id, label);
     }
+
+    @Override
+    public Set<CorporateTransaction> findByFromAccountIdAndDraft(Long id) {
+        return corporateTransactionRepository.findByFromAccountIdAndDraft(id,true);
+    }
 }

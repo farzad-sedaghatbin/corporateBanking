@@ -76,7 +76,7 @@ class TransactionDescriptionGatlingTest extends Simulation {
             .exec(http("Create new transactionDescription")
             .post("/corporatebanking/api/transaction-descriptions")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "lable":"SAMPLE_TEXT", "partyId":null}""")).asJSON
+            .body(StringBody("""{"id":null, "label":"SAMPLE_TEXT", "partyId":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_transactionDescription_url"))).exitHereIfFailed
             .pause(10)
